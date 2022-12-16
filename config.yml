@@ -1,19 +1,34 @@
 version: 1
+build:
+  binary: "platined"
+  ldflags: ["-X github.com/cosmos/cosmos-sdk/version.Name=PlatineChain", "-X github.com/cosmos/cosmos-sdk/version.AppName=platined", "-X github.com/cosmos/cosmos-sdk/version.Version=1.0.0", "-X github.com/cosmos/cosmos-sdk/version.Commit=9d0d1c343754eab78430b046fa9a68cce0594093", "-X github.com/cosmos/cosmos-sdk/version.BuildTags=Platine-Centos7.9-x64"]
+init:
+  home: "/mnt/hgfs/blockchain/platined"
+genesis:
+  chain_id: "platine-4"
+  app_state:
+    staking:
+      params:
+        bond_denom: "uplc"
+    minter:
+      params:
+        mint_denom: "uplc"
+    gov:
+      deposit_params:
+        min_deposit:
+        - denom: "uplc"
+          amount: '10000'
 accounts:
   - name: alice
-    coins: ["20000token", "200000000stake"]
+    coins: ["200000000uplc"]
   - name: bob
-    coins: ["10000token", "100000000stake"]
+    coins: ["100000000uplc"]
 validators:
   - name: alice
-    bonded: "100000000stake"
+    bonded: "100000000uplc"
 client:
   openapi:
     path: "docs/static/openapi.yml"
-  typescript:
-    path: "ts-client"
-  vuex:
-    path: "vue/src/store"
 faucet:
   name: bob
-  coins: ["5token", "100000stake"]
+  coins: ["100000uplc"]
