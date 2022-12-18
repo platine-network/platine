@@ -17,3 +17,8 @@ const (
 func KeyPrefix(p string) []byte {
 	return []byte(p)
 }
+
+const (
+	TokenKey      = "Token/value/"
+	TokenCountKey = "Token/count/"
+)

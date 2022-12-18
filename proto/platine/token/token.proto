@@ -1,0 +1,18 @@
+syntax = "proto3";
+package platinenetwork.platine.token;
+
+option go_package = "github.com/platine-network/platine/x/token/types";
+
+message Token {
+  uint64 id = 1;
+  string owner = 2; 
+  string name = 3; 
+  string symbol = 4; 
+  uint64 supply = 5; 
+  uint64 decimal = 6; 
+  bool mintable = 7; 
+  bool burnable = 8; 
+  uint64 mintSequence = 9; 
+  uint64 burnSequence = 10; 
+  
+}

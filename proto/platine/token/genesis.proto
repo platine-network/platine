@@ -3,6 +3,7 @@ package platinenetwork.platine.token;
 
 import "gogoproto/gogo.proto";
 import "platine/token/params.proto";
+import "platine/token/token.proto";
 // this line is used by starport scaffolding # genesis/proto/import
 
 option go_package = "github.com/platine-network/platine/x/token/types";
@@ -10,5 +11,7 @@ option go_package = "github.com/platine-network/platine/x/token/types";
 // GenesisState defines the token module's genesis state.
 message GenesisState {
   Params params = 1 [(gogoproto.nullable) = false];
+  repeated Token tokenList = 2 [(gogoproto.nullable) = false];
+  uint64 tokenCount = 3;
   // this line is used by starport scaffolding # genesis/proto/state
 }
