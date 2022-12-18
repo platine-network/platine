@@ -74482,6 +74482,8 @@ definitions:
       the connection handshake.
   platinenetwork.platine.token.MsgCreateTokenResponse:
     type: object
+  platinenetwork.platine.token.MsgMintResponse:
+    type: object
   platinenetwork.platine.token.Params:
     type: object
     description: Params defines the parameters for the module.
