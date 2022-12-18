@@ -7,7 +7,21 @@ option go_package = "github.com/platine-network/platine/x/token/types";
 
 // Msg defines the Msg service.
 service Msg {
-    // this line is used by starport scaffolding # proto/tx/rpc
+      rpc CreateToken(MsgCreateToken) returns (MsgCreateTokenResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgCreateToken {
+  string owner = 1;
+  string name = 2;
+  string symbol = 3;
+  uint64 supply = 4;
+  uint64 decimal = 5;
+  bool mintable = 6;
+  bool burnable = 7;
+}
+
+message MsgCreateTokenResponse {
 }
 
 // this line is used by starport scaffolding # proto/tx/message
