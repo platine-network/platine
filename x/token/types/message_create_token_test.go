@@ -17,13 +17,13 @@ func TestMsgCreateToken_ValidateBasic(t *testing.T) {
 		{
 			name: "invalid address",
 			msg: MsgCreateToken{
-				Creator: "invalid_address",
+			  Owner	: "invalid_address",
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		}, {
 			name: "valid address",
 			msg: MsgCreateToken{
-				Creator: sample.AccAddress(),
+				Owner: sample.AccAddress(),
 			},
 		},
 	}

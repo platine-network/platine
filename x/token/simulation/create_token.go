@@ -19,7 +19,7 @@ func SimulateMsgCreateToken(
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		msg := &types.MsgCreateToken{
-			Creator: simAccount.Address.String(),
+			Owner: simAccount.Address.String(),
 		}
 
 		// TODO: Handling the CreateToken simulation

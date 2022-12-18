@@ -9,9 +9,8 @@ const TypeMsgCreateToken = "create_token"
 
 var _ sdk.Msg = &MsgCreateToken{}
 
-func NewMsgCreateToken(creator string, owner string, name string, symbol string, supply uint64, decimal uint64, mintable bool, burnable bool) *MsgCreateToken {
+func NewMsgCreateToken(owner string, name string, symbol string, supply uint64, decimal uint64, mintable bool, burnable bool) *MsgCreateToken {
 	return &MsgCreateToken{
-		Creator:  creator,
 		Owner:    owner,
 		Name:     name,
 		Symbol:   symbol,
@@ -31,11 +30,11 @@ func (msg *MsgCreateToken) Type() string {
 }
 
 func (msg *MsgCreateToken) GetSigners() []sdk.AccAddress {
-	creator, err := sdk.AccAddressFromBech32(msg.Creator)
+	owner, err := sdk.AccAddressFromBech32(msg.Owner)
 	if err != nil {
 		panic(err)
 	}
-	return []sdk.AccAddress{creator}
+	return []sdk.AccAddress{owner}
 }
 
 func (msg *MsgCreateToken) GetSignBytes() []byte {
@@ -44,9 +43,9 @@ func (msg *MsgCreateToken) GetSignBytes() []byte {
 }
 
 func (msg *MsgCreateToken) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(msg.Creator)
+	_, err := sdk.AccAddressFromBech32(msg.Owner)
 	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid owner address (%s)", err)
 	}
 	return nil
 }

@@ -15,26 +15,25 @@ var _ = strconv.Itoa(0)
 
 func CmdCreateToken() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-token [owner] [name] [symbol] [supply] [decimal] [mintable] [burnable]",
+		Use:   "create-token [name] [symbol] [supply] [decimal] [mintable] [burnable]",
 		Short: "Broadcast message create-token",
-		Args:  cobra.ExactArgs(7),
+		Args:  cobra.ExactArgs(6),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			argOwner := args[0]
-			argName := args[1]
-			argSymbol := args[2]
-			argSupply, err := cast.ToUint64E(args[3])
+			argName := args[0]
+			argSymbol := args[1]
+			argSupply, err := cast.ToUint64E(args[2])
 			if err != nil {
 				return err
 			}
-			argDecimal, err := cast.ToUint64E(args[4])
+			argDecimal, err := cast.ToUint64E(args[3])
 			if err != nil {
 				return err
 			}
-			argMintable, err := cast.ToBoolE(args[5])
+			argMintable, err := cast.ToBoolE(args[4])
 			if err != nil {
 				return err
 			}
-			argBurnable, err := cast.ToBoolE(args[6])
+			argBurnable, err := cast.ToBoolE(args[5])
 			if err != nil {
 				return err
 			}
@@ -46,7 +45,6 @@ func CmdCreateToken() *cobra.Command {
 
 			msg := types.NewMsgCreateToken(
 				clientCtx.GetFromAddress().String(),
-				argOwner,
 				argName,
 				argSymbol,
 				argSupply,
