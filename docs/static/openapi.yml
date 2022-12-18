@@ -74480,6 +74480,8 @@ definitions:
     description: |-
       Version defines the versioning scheme used to negotiate the IBC verison in
       the connection handshake.
+  platinenetwork.platine.token.MsgBurnResponse:
+    type: object
   platinenetwork.platine.token.MsgCreateTokenResponse:
     type: object
   platinenetwork.platine.token.MsgMintResponse:

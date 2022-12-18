@@ -9,6 +9,7 @@ option go_package = "github.com/platine-network/platine/x/token/types";
 service Msg {
       rpc CreateToken(MsgCreateToken) returns (MsgCreateTokenResponse);
   rpc Mint(MsgMint) returns (MsgMintResponse);
+  rpc Burn(MsgBurn) returns (MsgBurnResponse);
 // this line is used by starport scaffolding # proto/tx/rpc
 }
 
@@ -33,6 +34,15 @@ message MsgMint {
 }
 
 message MsgMintResponse {
+}
+
+message MsgBurn {
+  string owner = 1;
+  string tokenID = 2;
+  uint64 amount = 3;
+}
+
+message MsgBurnResponse {
 }
 
 // this line is used by starport scaffolding # proto/tx/message
