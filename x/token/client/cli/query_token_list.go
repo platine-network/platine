@@ -12,7 +12,7 @@ import (
 func CmdGetTokenList() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "my-token [owner]",
-		Short: "list all token for the given owner address",
+		Short: "list all token for the given owner",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			owner := args[0]
