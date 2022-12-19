@@ -46,7 +46,7 @@ func CmdListToken() *cobra.Command {
 func CmdShowToken() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "show-token [id]",
-		Short: "shows a token",
+		Short: "shows the information for the given token",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
