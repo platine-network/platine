@@ -4,7 +4,7 @@ package platinenetwork.platine.token;
 option go_package = "github.com/platine-network/platine/x/token/types";
 
 message Token {
-  uint64 id = 1;
+  string id = 1;
   string owner = 2; 
   string name = 3; 
   string symbol = 4; 

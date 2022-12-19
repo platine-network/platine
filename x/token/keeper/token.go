@@ -2,68 +2,73 @@ package keeper
 
 import (
 	"encoding/binary"
+	"fmt"
+	"regexp"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/platine-network/platine/x/token/types"
 )
 
-// GetTokenCount get the total number of token
-func (k Keeper) GetTokenCount(ctx sdk.Context) uint64 {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), []byte{})
-	byteKey := types.KeyPrefix(types.TokenCountKey)
-	bz := store.Get(byteKey)
+const (
+	maxSymbolLength = 20
+	maxNameLength = 40
+	maxTokenSupply = 10000000000000000
+	nativeTokenName = "uplc"
+)
 
-	// Count doesn't exist: no element
-	if bz == nil {
-		return 0
+func (k Keeper) CheckCommonError(tokenId string, symbol string, name string, supply uint64) error {
+	if len(symbol) > maxSymbolLength {
+		errMsg := fmt.Sprintf("token symbol can not exceed %d caracters", maxSymbolLength)
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, errMsg)
 	}
 
-	// Parse bytes
-	return binary.BigEndian.Uint64(bz)
-}
+	if len(name) > maxNameLength {
+		errMsg := fmt.Sprintf("token name can not exceed %d caracters", maxNameLength)
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, errMsg)
+	}
 
-// SetTokenCount set the total number of token
-func (k Keeper) SetTokenCount(ctx sdk.Context, count uint64) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), []byte{})
-	byteKey := types.KeyPrefix(types.TokenCountKey)
-	bz := make([]byte, 8)
-	binary.BigEndian.PutUint64(bz, count)
-	store.Set(byteKey, bz)
-}
+	if tokenId == nativeTokenName {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "token name can not be same than native token")
+	}
 
-// AppendToken appends a token in the store with a new id and update the count
-func (k Keeper) AppendToken(
-	ctx sdk.Context,
-	token types.Token,
-) uint64 {
-	// Create the token
-	count := k.GetTokenCount(ctx)
+	re := regexp.MustCompile("^[a-zA-Z0-9_-]*$")
+	if !re.MatchString(tokenId) {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "only alpahabet, underscore, numbers are allowed for token id")
+	}
 
-	// Set the ID of the appended value
-	token.Id = count
+	if supply > maxTokenSupply {
+		errMsg := fmt.Sprintf("token total supply can not exceed %d", maxTokenSupply)
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, errMsg)
+	}
 
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TokenKey))
-	appendedValue := k.cdc.MustMarshal(&token)
-	store.Set(GetTokenIDBytes(token.Id), appendedValue)
+	if supply <= 0 {
+		errMsg := fmt.Sprintf("token total supply can not be less or equal to %d", 0)
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, errMsg)
+	}
 
-	// Update token count
-	k.SetTokenCount(ctx, count+1)
-
-	return count
+	return nil
 }
 
 // SetToken set a specific token in the store
 func (k Keeper) SetToken(ctx sdk.Context, token types.Token) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TokenKey))
 	b := k.cdc.MustMarshal(&token)
-	store.Set(GetTokenIDBytes(token.Id), b)
+	store.Set(types.TokenKeyPrefix(token.Id), b)
+	k.SetTokenToAccount(ctx, token)
+}
+
+func (k Keeper) SetTokenToAccount(ctx sdk.Context, token types.Token) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TokenOwnerKey))
+	accountStore := prefix.NewStore(store, []byte(token.Owner))
+	accountStore.Set([]byte(token.Id), GetBytesFromUint64(1))
 }
 
 // GetToken returns a token from its id
-func (k Keeper) GetToken(ctx sdk.Context, id uint64) (val types.Token, found bool) {
+func (k Keeper) GetToken(ctx sdk.Context, id string) (val types.Token, found bool) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TokenKey))
-	b := store.Get(GetTokenIDBytes(id))
+	b := store.Get(types.TokenKeyPrefix(id))
 	if b == nil {
 		return val, false
 	}
@@ -72,9 +77,9 @@ func (k Keeper) GetToken(ctx sdk.Context, id uint64) (val types.Token, found boo
 }
 
 // RemoveToken removes a token from the store
-func (k Keeper) RemoveToken(ctx sdk.Context, id uint64) {
+func (k Keeper) RemoveToken(ctx sdk.Context, id string) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TokenKey))
-	store.Delete(GetTokenIDBytes(id))
+	store.Delete(types.TokenKeyPrefix(id))
 }
 
 // GetAllToken returns all token
@@ -93,14 +98,14 @@ func (k Keeper) GetAllToken(ctx sdk.Context) (list []types.Token) {
 	return
 }
 
-// GetTokenIDBytes returns the byte representation of the ID
-func GetTokenIDBytes(id uint64) []byte {
+// GetBytesFromUint64 returns the byte representation of the ID
+func GetBytesFromUint64(id uint64) []byte {
 	bz := make([]byte, 8)
 	binary.BigEndian.PutUint64(bz, id)
 	return bz
 }
 
-// GetTokenIDFromBytes returns ID in uint64 format from a byte array
-func GetTokenIDFromBytes(bz []byte) uint64 {
+// GetUInt64FromBytes returns ID in uint64 format from a byte array
+func GetUInt64FromBytes(bz []byte) uint64 {
 	return binary.BigEndian.Uint64(bz)
 }

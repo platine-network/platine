@@ -1,5 +1,9 @@
 package types
 
+import "encoding/binary"
+
+var _ binary.ByteOrder
+
 const (
 	// ModuleName defines the module name
 	ModuleName = "token"
@@ -14,11 +18,20 @@ const (
 	MemStoreKey = "mem_token"
 )
 
+const (
+	TokenKey      = "TokenKey"
+	TokenOwnerKey      = "TokenOwnerKey"
+)
+
 func KeyPrefix(p string) []byte {
 	return []byte(p)
 }
 
-const (
-	TokenKey      = "Token/value/"
-	TokenCountKey = "Token/count/"
-)
+func TokenKeyPrefix(tokenId string) []byte {
+	var key []byte
+	tokenIdBytes := []byte(tokenId)
+	key = append(key, tokenIdBytes...)
+	key = append(key, []byte("/")...)
+
+	return key
+}

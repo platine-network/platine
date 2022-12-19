@@ -1,7 +1,6 @@
 version: 1
 build:
   binary: "platined"
-  ldflags: ["-X github.com/cosmos/cosmos-sdk/version.Name=PlatineChain", "-X github.com/cosmos/cosmos-sdk/version.AppName=platined", "-X github.com/cosmos/cosmos-sdk/version.Version=1.0.0", "-X github.com/cosmos/cosmos-sdk/version.Commit=9d0d1c343754eab78430b046fa9a68cce0594093", "-X github.com/cosmos/cosmos-sdk/version.BuildTags=Platine-Centos7.9-x64"]
 genesis:
   chain_id: "platine-1"
   app_state:
@@ -18,12 +17,12 @@ genesis:
           amount: '10000'
 accounts:
   - name: alice
-    coins: ["200000000uplc"]
+    coins: ["2000000000000000000000uplc"]
   - name: bob
-    coins: ["100000000uplc"]
+    coins: ["1000000000000000000000uplc"]
 validators:
   - name: alice
-    bonded: "100000000uplc"
+    bonded: "1000000000000000000uplc"
 client:
   openapi:
     path: "docs/static/openapi.yml"

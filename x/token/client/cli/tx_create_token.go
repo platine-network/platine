@@ -16,7 +16,7 @@ var _ = strconv.Itoa(0)
 func CmdCreateToken() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create-token [name] [symbol] [supply] [decimal] [mintable] [burnable]",
-		Short: "Broadcast message create-token",
+		Short: "Create new token",
 		Args:  cobra.ExactArgs(6),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			argName := args[0]

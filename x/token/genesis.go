@@ -12,20 +12,14 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	for _, elem := range genState.TokenList {
 		k.SetToken(ctx, elem)
 	}
-
-	// Set token count
-	k.SetTokenCount(ctx, genState.TokenCount)
 	// this line is used by starport scaffolding # genesis/module/init
-	k.SetParams(ctx, genState.Params)
 }
 
 // ExportGenesis returns the module's exported genesis
 func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis := types.DefaultGenesis()
-	genesis.Params = k.GetParams(ctx)
 
 	genesis.TokenList = k.GetAllToken(ctx)
-	genesis.TokenCount = k.GetTokenCount(ctx)
 	// this line is used by starport scaffolding # genesis/module/export
 
 	return genesis

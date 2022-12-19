@@ -16,7 +16,7 @@ var _ = strconv.Itoa(0)
 func CmdMint() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "mint [token-id] [amount] [to]",
-		Short: "Broadcast message mint",
+		Short: "Mint new token",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			argTokenID := args[0]

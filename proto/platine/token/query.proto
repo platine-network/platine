@@ -4,7 +4,6 @@ package platinenetwork.platine.token;
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
-import "platine/token/params.proto";
 import "platine/token/token.proto";
 // this line is used by starport scaffolding # 1
 
@@ -12,34 +11,26 @@ option go_package = "github.com/platine-network/platine/x/token/types";
 
 // Query defines the gRPC querier service.
 service Query {
-  // Parameters queries the parameters of the module.
-  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/platine-network/platine/token/params";
-  }
   // Queries a Token by id.
 	rpc Token(QueryGetTokenRequest) returns (QueryGetTokenResponse) {
-		option (google.api.http).get = "/platine-network/platine/token/token/{id}";
+		option (google.api.http).get = "/platine/token/{id}";
 	}
 
 	// Queries a list of Token items.
 	rpc TokenAll(QueryAllTokenRequest) returns (QueryAllTokenResponse) {
-		option (google.api.http).get = "/platine-network/platine/token/token";
+		option (google.api.http).get = "/platine/token";
+	}
+
+  // Queries a list of Token items for owner.
+	rpc TokenList(QueryTokenListRequest) returns (QueryTokenListResponse) {
+		option (google.api.http).get = "/platine/token/list";
 	}
 
 // this line is used by starport scaffolding # 2
 }
 
-// QueryParamsRequest is request type for the Query/Params RPC method.
-message QueryParamsRequest {}
-
-// QueryParamsResponse is response type for the Query/Params RPC method.
-message QueryParamsResponse {
-  // params holds all the parameters of this module.
-  Params params = 1 [(gogoproto.nullable) = false];
-}
-
 message QueryGetTokenRequest {
-	uint64 id = 1;
+	string id = 1;
 }
 
 message QueryGetTokenResponse {
@@ -53,6 +44,14 @@ message QueryAllTokenRequest {
 message QueryAllTokenResponse {
 	repeated Token Token = 1 [(gogoproto.nullable) = false];
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryTokenListRequest {
+	string owner = 1;
+}
+
+message QueryTokenListResponse {
+	repeated string Token = 1;
 }
 
 // this line is used by starport scaffolding # 3
