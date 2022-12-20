@@ -7,25 +7,29 @@ genesis:
     staking:
       params:
         bond_denom: "uplc"
-    minter:
+        unbonding_time: "600s"
+    mint:
       params:
         mint_denom: "uplc"
     gov:
       deposit_params:
         min_deposit:
         - denom: "uplc"
-          amount: '10000'
+          amount: '10000000'
+        max_deposit_period: "600s"
+      voting_params:
+        voting_period: "1200s"
 accounts:
   - name: alice
-    coins: ["2000000000000000000000uplc"]
+    coins: ["500000000000uplc"]
   - name: bob
-    coins: ["1000000000000000000000uplc"]
+    coins: ["2000000000000uplc"]
 validators:
   - name: alice
-    bonded: "1000000000000000000uplc"
+    bonded: "20000000000uplc"
 client:
   openapi:
     path: "docs/static/openapi.yml"
 faucet:
   name: bob
-  coins: ["100000uplc"]
+  coins: ["1000000000000000000uplc"]
