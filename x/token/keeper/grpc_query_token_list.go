@@ -24,12 +24,10 @@ func (k Keeper) TokenList(c context.Context, req *types.QueryTokenListRequest) (
 	defer iterator.Close()
 
 	var tokens []string
-	for ; iterator.Valid(); iterator.Next(){
+	for ; iterator.Valid(); iterator.Next() {
 		tokenId := string(iterator.Key()[:])
 		tokens = append(tokens, tokenId)
 	}
 
-
 	return &types.QueryTokenListResponse{Token: tokens}, nil
 }
-

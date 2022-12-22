@@ -20,7 +20,7 @@ const (
 
 const (
 	TokenKey      = "TokenKey"
-	TokenOwnerKey      = "TokenOwnerKey"
+	TokenOwnerKey = "TokenOwnerKey"
 )
 
 func KeyPrefix(p string) []byte {

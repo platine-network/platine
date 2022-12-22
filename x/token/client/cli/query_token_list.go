@@ -41,4 +41,3 @@ func CmdGetTokenList() *cobra.Command {
 
 	return cmd
 }
-

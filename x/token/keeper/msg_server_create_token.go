@@ -32,14 +32,14 @@ func (k msgServer) CreateToken(goCtx context.Context, msg *types.MsgCreateToken)
 	const burnSequence = 0
 
 	var token = types.Token{
-		Id: tokenID,
-		Owner: msg.Owner,
-		Name: msg.Name,
-		Symbol: msg.Symbol,
-		Supply: msg.Supply,
-		Decimal: msg.Decimal,
-		Mintable: msg.Mintable,
-		Burnable: msg.Burnable,
+		Id:           tokenID,
+		Owner:        msg.Owner,
+		Name:         msg.Name,
+		Symbol:       msg.Symbol,
+		Supply:       msg.Supply,
+		Decimal:      msg.Decimal,
+		Mintable:     msg.Mintable,
+		Burnable:     msg.Burnable,
 		MintSequence: mintSequence,
 		BurnSequence: burnSequence,
 	}

@@ -1,4 +1,4 @@
-package token
+package epoch
 
 import (
 	"context"
@@ -16,9 +16,9 @@ import (
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/platine-network/platine/x/token/client/cli"
-	"github.com/platine-network/platine/x/token/keeper"
-	"github.com/platine-network/platine/x/token/types"
+	"github.com/platine-network/platine/x/epoch/client/cli"
+	"github.com/platine-network/platine/x/epoch/keeper"
+	"github.com/platine-network/platine/x/epoch/types"
 )
 
 var (
@@ -90,20 +90,16 @@ func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 // AppModule implements the AppModule interface that defines the inter-dependent methods that modules need to implement
 type AppModule struct {
 	AppModuleBasic
-
-	keeper     keeper.Keeper
-	bankKeeper types.BankKeeper
+	keeper keeper.Keeper
 }
 
 func NewAppModule(
 	cdc codec.Codec,
 	keeper keeper.Keeper,
-	bankKeeper types.BankKeeper,
 ) AppModule {
 	return AppModule{
 		AppModuleBasic: NewAppModuleBasic(cdc),
 		keeper:         keeper,
-		bankKeeper:     bankKeeper,
 	}
 }
 

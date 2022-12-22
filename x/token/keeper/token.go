@@ -13,8 +13,8 @@ import (
 
 const (
 	maxSymbolLength = 20
-	maxNameLength = 40
-	maxTokenSupply = 10000000000000000
+	maxNameLength   = 40
+	maxTokenSupply  = 10000000000000000
 	nativeTokenName = "uplc"
 )
 
