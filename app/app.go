@@ -522,9 +522,8 @@ func New(
 		appCodec,
 		keys[epochmoduletypes.StoreKey],
 		keys[epochmoduletypes.MemStoreKey],
-		app.GetSubspace(epochmoduletypes.ModuleName),
 	)
-	epochModule := epochmodule.NewAppModule(appCodec, app.EpochKeeper, app.AccountKeeper, app.BankKeeper)
+	epochModule := epochmodule.NewAppModule(appCodec, app.EpochKeeper)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
@@ -690,7 +689,6 @@ func New(
 		evidence.NewAppModule(app.EvidenceKeeper),
 		ibc.NewAppModule(app.IBCKeeper),
 		transferModule,
-		epochModule,
 		// this line is used by starport scaffolding # stargate/app/appModule
 	)
 	app.sm.RegisterStoreDecoders()

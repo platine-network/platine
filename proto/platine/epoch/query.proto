@@ -3,14 +3,39 @@ package platinenetwork.platine.epoch;
 
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "cosmos/base/query/v1beta1/pagination.proto";
+import "platine/epoch/epoch.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "github.com/platine-network/platine/x/epoch/types";
 
 // Query defines the gRPC querier service.
 service Query {
-  // this line is used by starport scaffolding # 2
+  // Queries current Epoch.
+	rpc CurrentEpoch(QueryCurrentEpochRequest) returns (QueryCurrentEpochResponse) {
+		option (google.api.http).get = "/platine/epoch/current_epoch";
+	}
+
+	// Queries a list of Epoch items.
+	rpc EpochAll(QueryAllEpochRequest) returns (QueryAllEpochResponse) {
+		option (google.api.http).get = "/platine/epoch/epochs";
+	}
+
+// this line is used by starport scaffolding # 2
+}
+
+message QueryCurrentEpochRequest {
+	string identifier = 1;
+}
+
+message QueryCurrentEpochResponse {
+	int64 current_epoch = 1;
+}
+
+message QueryAllEpochRequest {
+}
+
+message QueryAllEpochResponse {
+	repeated Epoch Epochs = 1 [(gogoproto.nullable) = false];
 }
 
 // this line is used by starport scaffolding # 3

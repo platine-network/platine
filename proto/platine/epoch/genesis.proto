@@ -2,6 +2,7 @@ syntax = "proto3";
 package platinenetwork.platine.epoch;
 
 import "gogoproto/gogo.proto";
+import "platine/epoch/epoch.proto";
 // this line is used by starport scaffolding # genesis/proto/import
 
 option go_package = "github.com/platine-network/platine/x/epoch/types";
@@ -9,5 +10,6 @@ option go_package = "github.com/platine-network/platine/x/epoch/types";
 // GenesisState defines the epoch module's genesis state.
 message GenesisState {
   
+  repeated Epoch epochs = 1 [(gogoproto.nullable) = false];
   // this line is used by starport scaffolding # genesis/proto/state
 }

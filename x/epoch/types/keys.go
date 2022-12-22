@@ -14,8 +14,21 @@ const (
 	MemStoreKey = "mem_epoch"
 )
 
+const (
+	EventTypeEpochEnd = "epoch_end"
+	EventTypeEpochStart = "epoch_start"
+
+	AttributeEpochNumber = "epoch_number"
+	AttributeEpochStartTime = "start_time"
+)
+
 var KeyPrefixEpoch = []byte{0x01}
 
 func KeyPrefix(p string) []byte {
 	return []byte(p)
 }
+
+const (
+	EpochKey      = "Epoch/value/"
+	EpochCountKey = "Epoch/count/"
+)
