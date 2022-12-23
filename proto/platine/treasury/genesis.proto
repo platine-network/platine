@@ -1,0 +1,14 @@
+syntax = "proto3";
+package platinenetwork.platine.treasury;
+
+import "gogoproto/gogo.proto";
+import "platine/treasury/params.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "github.com/platine-network/platine/x/treasury/types";
+
+// GenesisState defines the treasury module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  // this line is used by starport scaffolding # genesis/proto/state
+}

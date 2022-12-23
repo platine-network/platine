@@ -110,7 +110,10 @@ import (
 	tokenmodule "github.com/platine-network/platine/x/token"
 	tokenmodulekeeper "github.com/platine-network/platine/x/token/keeper"
 	tokenmoduletypes "github.com/platine-network/platine/x/token/types"
-	// this line is used by starport scaffolding # stargate/app/moduleImport
+	treasurymodule "github.com/platine-network/platine/x/treasury"
+	treasurymodulekeeper "github.com/platine-network/platine/x/treasury/keeper"
+	treasurymoduletypes "github.com/platine-network/platine/x/treasury/types"
+// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	appparams "github.com/platine-network/platine/app/params"
 	"github.com/platine-network/platine/docs"
@@ -170,7 +173,8 @@ var (
 		vesting.AppModuleBasic{},
 		tokenmodule.AppModuleBasic{},
 		epochmodule.AppModuleBasic{},
-		// this line is used by starport scaffolding # stargate/app/moduleBasic
+		treasurymodule.AppModuleBasic{},
+// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
 	// module account permissions
@@ -184,7 +188,8 @@ var (
 		govtypes.ModuleName:            {authtypes.Burner},
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
 		tokenmoduletypes.ModuleName:    {authtypes.Minter, authtypes.Burner, authtypes.Staking},
-		// this line is used by starport scaffolding # stargate/app/maccPerms
+		treasurymoduletypes.ModuleName: {authtypes.Minter, authtypes.Burner, authtypes.Staking},
+// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
 
@@ -245,9 +250,9 @@ type App struct {
 	ScopedICAHostKeeper  capabilitykeeper.ScopedKeeper
 
 	TokenKeeper tokenmodulekeeper.Keeper
-
 	EpochKeeper epochmodulekeeper.Keeper
-	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
+	TreasuryKeeper treasurymodulekeeper.Keeper
+// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// mm is the module manager
 	mm *module.Manager
@@ -293,7 +298,8 @@ func New(
 		icacontrollertypes.StoreKey,
 		tokenmoduletypes.StoreKey,
 		epochmoduletypes.StoreKey,
-		// this line is used by starport scaffolding # stargate/app/storeKey
+		treasurymoduletypes.StoreKey,
+// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -525,7 +531,19 @@ func New(
 	)
 	epochModule := epochmodule.NewAppModule(appCodec, app.EpochKeeper)
 
-	// this line is used by starport scaffolding # stargate/app/keeperDefinition
+	
+	app.TreasuryKeeper = *treasurymodulekeeper.NewKeeper(
+		appCodec,
+		keys[treasurymoduletypes.StoreKey],
+		keys[treasurymoduletypes.MemStoreKey],
+		app.GetSubspace(treasurymoduletypes.ModuleName),
+		app.BankKeeper,
+		app.AccountKeeper,
+		app.EpochKeeper,
+	)
+	treasuryModule := treasurymodule.NewAppModule(appCodec, app.TreasuryKeeper, app.AccountKeeper, app.BankKeeper)
+
+		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
 	// Sealing prevents other modules from creating scoped sub-keepers
 	app.CapabilityKeeper.Seal()
@@ -572,7 +590,8 @@ func New(
 		icaModule,
 		tokenModule,
 		epochModule,
-		// this line is used by starport scaffolding # stargate/app/appModule
+		treasuryModule,
+// this line is used by starport scaffolding # stargate/app/appModule
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -603,7 +622,8 @@ func New(
 		vestingtypes.ModuleName,
 		tokenmoduletypes.ModuleName,
 		epochmoduletypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/beginBlockers
+		treasurymoduletypes.ModuleName,
+// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
 
 	app.mm.SetOrderEndBlockers(
@@ -629,7 +649,8 @@ func New(
 		vestingtypes.ModuleName,
 		tokenmoduletypes.ModuleName,
 		epochmoduletypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/endBlockers
+		treasurymoduletypes.ModuleName,
+// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -660,7 +681,8 @@ func New(
 		vestingtypes.ModuleName,
 		tokenmoduletypes.ModuleName,
 		epochmoduletypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/initGenesis
+		treasurymoduletypes.ModuleName,
+// this line is used by starport scaffolding # stargate/app/initGenesis
 	)
 
 	// Uncomment if you want to set a custom migration order here.
@@ -689,7 +711,8 @@ func New(
 		evidence.NewAppModule(app.EvidenceKeeper),
 		ibc.NewAppModule(app.IBCKeeper),
 		transferModule,
-		// this line is used by starport scaffolding # stargate/app/appModule
+		treasuryModule,
+// this line is used by starport scaffolding # stargate/app/appModule
 	)
 	app.sm.RegisterStoreDecoders()
 
@@ -889,7 +912,8 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	paramsKeeper.Subspace(tokenmoduletypes.ModuleName)
 	paramsKeeper.Subspace(epochmoduletypes.ModuleName)
-	// this line is used by starport scaffolding # stargate/app/paramSubspace
+	paramsKeeper.Subspace(treasurymoduletypes.ModuleName)
+// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper
 }
