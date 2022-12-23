@@ -1,0 +1,17 @@
+syntax = "proto3";
+package platinenetwork.platine.treasury;
+
+import "gogoproto/gogo.proto";
+option go_package = "github.com/platine-network/platine/x/treasury/types";
+
+// Minter represents the minting state.
+message Minter {
+  // provision represent rewards for the current epoch.
+  string provision = 1 [
+    (gogoproto.moretags) = "yaml:\"provision\"",
+    (gogoproto.jsontag) = "provision,omitempty",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ]; 
+  
+}

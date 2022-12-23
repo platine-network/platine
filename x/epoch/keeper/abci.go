@@ -41,7 +41,7 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) {
 				sdk.NewEvent(
 					types.EventTypeEpochEnd,
 					sdk.NewAttribute(types.AttributeEpochNumber, fmt.Sprintf("%d", epoch.CurrentEpoch)),
-				)
+				),
 			)
 			k.AfterEpochEnd(ctx, epoch.Identifier, epoch.CurrentEpoch)
 			epoch.CurrentEpoch += 1
@@ -53,7 +53,7 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) {
 					types.EventTypeEpochStart,
 					sdk.NewAttribute(types.AttributeEpochNumber, fmt.Sprintf("%d", epoch.CurrentEpoch)),
 					sdk.NewAttribute(types.AttributeEpochStartTime, fmt.Sprintf("%d", epoch.CurrentEpochStartTime.Unix())),
-				)
+				),
 			)
 
 			k.setEpoch(ctx, epoch)

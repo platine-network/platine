@@ -3,6 +3,7 @@ package platinenetwork.platine.treasury;
 
 import "gogoproto/gogo.proto";
 import "platine/treasury/params.proto";
+import "platine/treasury/minter.proto";
 // this line is used by starport scaffolding # genesis/proto/import
 
 option go_package = "github.com/platine-network/platine/x/treasury/types";
@@ -10,5 +11,7 @@ option go_package = "github.com/platine-network/platine/x/treasury/types";
 // GenesisState defines the treasury module's genesis state.
 message GenesisState {
   Params params = 1 [(gogoproto.nullable) = false];
+  repeated Minter minterList = 2 [(gogoproto.nullable) = false];
+  uint64 minterCount = 3;
   // this line is used by starport scaffolding # genesis/proto/state
 }

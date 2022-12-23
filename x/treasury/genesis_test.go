@@ -14,7 +14,16 @@ func TestGenesis(t *testing.T) {
 	genesisState := types.GenesisState{
 		Params:	types.DefaultParams(),
 		
-		// this line is used by starport scaffolding # genesis/test/state
+		MinterList: []types.Minter{
+		{
+			Id: 0,
+		},
+		{
+			Id: 1,
+		},
+	},
+	MinterCount: 2,
+	// this line is used by starport scaffolding # genesis/test/state
 	}
 
 	k, ctx := keepertest.TreasuryKeeper(t)
@@ -27,5 +36,7 @@ func TestGenesis(t *testing.T) {
 
 	
 
-	// this line is used by starport scaffolding # genesis/test/assert
+	require.ElementsMatch(t, genesisState.MinterList, got.MinterList)
+require.Equal(t, genesisState.MinterCount, got.MinterCount)
+// this line is used by starport scaffolding # genesis/test/assert
 }

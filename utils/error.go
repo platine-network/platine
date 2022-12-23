@@ -40,7 +40,7 @@ func PrintPanicRecoveryError(ctx sdk.context, recoveryError interface{}) {
 	switch e := recoveryError.(type) {
 	case string:
 		ctx.Logger().Error("Recovering from (string) panic: " + e)
-	case runtime.Error():
+	case runtime.Error:
 		ctx.Logger().Error("Recovering from (runtime.Error) panic: " + e.Error())
 	case error:
 		ctx.Logger().Error("Recovering from (error) panic: " + e.Error())

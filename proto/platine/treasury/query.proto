@@ -5,6 +5,7 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "platine/treasury/params.proto";
+import "platine/treasury/minter.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "github.com/platine-network/platine/x/treasury/types";
@@ -15,7 +16,17 @@ service Query {
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/platine/treasury/params";
   }
-  // this line is used by starport scaffolding # 2
+  // Queries a Minter by id.
+	rpc Minter(QueryGetMinterRequest) returns (QueryGetMinterResponse) {
+		option (google.api.http).get = "/platine-network/platine/treasury/minter/{id}";
+	}
+
+	// Queries a list of Minter items.
+	rpc MinterAll(QueryAllMinterRequest) returns (QueryAllMinterResponse) {
+		option (google.api.http).get = "/platine-network/platine/treasury/minter";
+	}
+
+// this line is used by starport scaffolding # 2
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -25,6 +36,23 @@ message QueryParamsRequest {}
 message QueryParamsResponse {
   // params holds all the parameters of this module.
   Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetMinterRequest {
+	uint64 id = 1;
+}
+
+message QueryGetMinterResponse {
+	Minter Minter = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllMinterRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllMinterResponse {
+	repeated Minter Minter = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // this line is used by starport scaffolding # 3
