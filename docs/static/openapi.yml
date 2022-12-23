@@ -45100,53 +45100,19 @@ paths:
           type: string
       tags:
         - Query
-  /platine-network/platine/treasury/minter:
+  /platine/treasury/epoch_provision:
     get:
-      summary: Queries a list of Minter items.
-      operationId: PlatinenetworkPlatineTreasuryMinterAll
+      summary: Returns the current minting epoch provisions value
+      operationId: PlatinenetworkPlatineTreasuryEpochProvision
       responses:
         '200':
           description: A successful response.
           schema:
             type: object
             properties:
-              Minter:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    provision:
-                      type: string
-                      description: provision represent rewards for the current epoch.
-                  description: Minter represents the minting state.
-              pagination:
-                type: object
-                properties:
-                  next_key:
-                    type: string
-                    format: byte
-                    description: |-
-                      next_key is the key to be passed to PageRequest.key to
-                      query the next page most efficiently. It will be empty if
-                      there are no more results.
-                  total:
-                    type: string
-                    format: uint64
-                    title: >-
-                      total is total number of results available if
-                      PageRequest.count_total
-
-                      was set, its value is undefined otherwise
-                description: >-
-                  PageResponse is to be embedded in gRPC response messages where
-                  the
-
-                  corresponding request message has used PageRequest.
-
-                   message SomeResponse {
-                           repeated Bar results = 1;
-                           PageResponse page = 2;
-                   }
+              epoch_provision:
+                type: string
+                format: byte
         default:
           description: An unexpected error response.
           schema:
@@ -45165,106 +45131,6 @@ paths:
                     '@type':
                       type: string
                   additionalProperties: {}
-      parameters:
-        - name: pagination.key
-          description: |-
-            key is a value returned in PageResponse.next_key to begin
-            querying the next page most efficiently. Only one of offset or key
-            should be set.
-          in: query
-          required: false
-          type: string
-          format: byte
-        - name: pagination.offset
-          description: >-
-            offset is a numeric offset that can be used when key is unavailable.
-
-            It is less efficient than using key. Only one of offset or key
-            should
-
-            be set.
-          in: query
-          required: false
-          type: string
-          format: uint64
-        - name: pagination.limit
-          description: >-
-            limit is the total number of results to be returned in the result
-            page.
-
-            If left empty it will default to a value to be set by each app.
-          in: query
-          required: false
-          type: string
-          format: uint64
-        - name: pagination.count_total
-          description: >-
-            count_total is set to true  to indicate that the result set should
-            include
-
-            a count of the total number of items available for pagination in
-            UIs.
-
-            count_total is only respected when offset is used. It is ignored
-            when key
-
-            is set.
-          in: query
-          required: false
-          type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
-
-
-            Since: cosmos-sdk 0.43
-          in: query
-          required: false
-          type: boolean
-      tags:
-        - Query
-  /platine-network/platine/treasury/minter/{id}:
-    get:
-      summary: Queries a Minter by id.
-      operationId: PlatinenetworkPlatineTreasuryMinter
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              Minter:
-                type: object
-                properties:
-                  provision:
-                    type: string
-                    description: provision represent rewards for the current epoch.
-                description: Minter represents the minting state.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          format: uint64
       tags:
         - Query
   /platine/treasury/params:
@@ -45280,6 +45146,104 @@ paths:
               params:
                 description: params holds all the parameters of this module.
                 type: object
+                properties:
+                  mint_denom:
+                    type: string
+                    description: mint_denom is the denom of the coin to mint.
+                  genesis_epoch_provision:
+                    type: string
+                    description: genesis epoch provision from the first epoch.
+                  epoch_identifier:
+                    type: string
+                    title: >-
+                      epoch identifier is the mint epoch identifier e.g. (hour,
+                      day, week).
+
+                      See module "epoch"
+                  reduction_period_epochs:
+                    type: string
+                    format: int64
+                    description: >-
+                      reduction period in epochs is the number of epochs it
+                      takes
+
+                      to reduce the rewards.
+                  reduction_factor:
+                    type: string
+                    description: >-
+                      reduction factor is the reduction multiplier to execute
+
+                      at the end of each period set by reduction period in
+                      epochs.
+                  distribution:
+                    description: >-
+                      distribution defines the distribution proportions of the
+                      minted
+
+                      denom. In other words, defines which stakeholders will
+                      receive the minted
+
+                      denoms and how much.
+                    type: object
+                    properties:
+                      stakingPool:
+                        type: string
+                        description: >-
+                          staking pool defines the proportion of the minted mint
+                          denom that is to be
+
+                          allocated as staking rewards.
+                      ecosystemPool:
+                        type: string
+                        description: >-
+                          ecosystem pool defines the proportion of the minted
+                          mint denom that is
+
+                          to be allocated as ecosystem pool incentives.
+                      developerPool:
+                        type: string
+                        title: >-
+                          developer pool defines the proportion of the minted
+                          mint denom 
+
+                          to pay developers for their past and future work
+                      rewardPool:
+                        type: string
+                        description: >-
+                          reward pool defines the proportion of the minted mint
+                          denom that is to be
+
+                          allocated for rewards activities.
+                      communityPool:
+                        type: string
+                        description: >-
+                          community pool defines the proportion of the minted
+                          mint denom that is
+
+                          to be allocated to the community pool incentives.
+                  reward_distribution_start_epoch:
+                    type: string
+                    format: int64
+                    title: >-
+                      minting rewards distribution start epoch defines start
+                      epoch to distribute minting
+
+                      rewards
+                  ecosystem_pool_address:
+                    type: string
+                    title: |-
+                      The ecosystem pool address to send the reward to
+                      If empty the minted coin will be send to community pool
+                  developer_pool_address:
+                    type: string
+                    title: |-
+                      The developer pool address to send the reward to
+                      If empty the minted coin will be send to community pool
+                  reward_pool_address:
+                    type: string
+                    title: |-
+                      The reward pool address to send the reward to
+                      If empty the minted coin will be send to community pool
             description: >-
               QueryParamsResponse is response type for the Query/Params RPC
               method.
@@ -75170,68 +75134,233 @@ definitions:
       burnSequence:
         type: string
         format: uint64
-  platinenetwork.platine.treasury.Minter:
+  platinenetwork.platine.treasury.Distribution:
     type: object
     properties:
-      provision:
+      stakingPool:
         type: string
-        description: provision represent rewards for the current epoch.
-    description: Minter represents the minting state.
+        description: >-
+          staking pool defines the proportion of the minted mint denom that is
+          to be
+
+          allocated as staking rewards.
+      ecosystemPool:
+        type: string
+        description: |-
+          ecosystem pool defines the proportion of the minted mint denom that is
+          to be allocated as ecosystem pool incentives.
+      developerPool:
+        type: string
+        title: |-
+          developer pool defines the proportion of the minted mint denom 
+          to pay developers for their past and future work
+      rewardPool:
+        type: string
+        description: >-
+          reward pool defines the proportion of the minted mint denom that is to
+          be
+
+          allocated for rewards activities.
+      communityPool:
+        type: string
+        description: |-
+          community pool defines the proportion of the minted mint denom that is
+          to be allocated to the community pool incentives.
   platinenetwork.platine.treasury.Params:
     type: object
-    description: Params defines the parameters for the module.
-  platinenetwork.platine.treasury.QueryAllMinterResponse:
-    type: object
     properties:
-      Minter:
-        type: array
-        items:
-          type: object
-          properties:
-            provision:
-              type: string
-              description: provision represent rewards for the current epoch.
-          description: Minter represents the minting state.
-      pagination:
-        type: object
-        properties:
-          next_key:
-            type: string
-            format: byte
-            description: |-
-              next_key is the key to be passed to PageRequest.key to
-              query the next page most efficiently. It will be empty if
-              there are no more results.
-          total:
-            type: string
-            format: uint64
-            title: >-
-              total is total number of results available if
-              PageRequest.count_total
-
-              was set, its value is undefined otherwise
+      mint_denom:
+        type: string
+        description: mint_denom is the denom of the coin to mint.
+      genesis_epoch_provision:
+        type: string
+        description: genesis epoch provision from the first epoch.
+      epoch_identifier:
+        type: string
+        title: |-
+          epoch identifier is the mint epoch identifier e.g. (hour, day, week).
+          See module "epoch"
+      reduction_period_epochs:
+        type: string
+        format: int64
         description: |-
-          PageResponse is to be embedded in gRPC response messages where the
-          corresponding request message has used PageRequest.
+          reduction period in epochs is the number of epochs it takes
+          to reduce the rewards.
+      reduction_factor:
+        type: string
+        description: |-
+          reduction factor is the reduction multiplier to execute
+          at the end of each period set by reduction period in epochs.
+      distribution:
+        description: >-
+          distribution defines the distribution proportions of the minted
 
-           message SomeResponse {
-                   repeated Bar results = 1;
-                   PageResponse page = 2;
-           }
-  platinenetwork.platine.treasury.QueryGetMinterResponse:
-    type: object
-    properties:
-      Minter:
+          denom. In other words, defines which stakeholders will receive the
+          minted
+
+          denoms and how much.
         type: object
         properties:
-          provision:
+          stakingPool:
             type: string
-            description: provision represent rewards for the current epoch.
-        description: Minter represents the minting state.
+            description: >-
+              staking pool defines the proportion of the minted mint denom that
+              is to be
+
+              allocated as staking rewards.
+          ecosystemPool:
+            type: string
+            description: >-
+              ecosystem pool defines the proportion of the minted mint denom
+              that is
+
+              to be allocated as ecosystem pool incentives.
+          developerPool:
+            type: string
+            title: |-
+              developer pool defines the proportion of the minted mint denom 
+              to pay developers for their past and future work
+          rewardPool:
+            type: string
+            description: >-
+              reward pool defines the proportion of the minted mint denom that
+              is to be
+
+              allocated for rewards activities.
+          communityPool:
+            type: string
+            description: >-
+              community pool defines the proportion of the minted mint denom
+              that is
+
+              to be allocated to the community pool incentives.
+      reward_distribution_start_epoch:
+        type: string
+        format: int64
+        title: >-
+          minting rewards distribution start epoch defines start epoch to
+          distribute minting
+
+          rewards
+      ecosystem_pool_address:
+        type: string
+        title: |-
+          The ecosystem pool address to send the reward to
+          If empty the minted coin will be send to community pool
+      developer_pool_address:
+        type: string
+        title: |-
+          The developer pool address to send the reward to
+          If empty the minted coin will be send to community pool
+      reward_pool_address:
+        type: string
+        title: |-
+          The reward pool address to send the reward to
+          If empty the minted coin will be send to community pool
+    description: Params defines the parameters for the module.
+  platinenetwork.platine.treasury.QueryEpochProvisionResponse:
+    type: object
+    properties:
+      epoch_provision:
+        type: string
+        format: byte
   platinenetwork.platine.treasury.QueryParamsResponse:
     type: object
     properties:
       params:
         description: params holds all the parameters of this module.
         type: object
+        properties:
+          mint_denom:
+            type: string
+            description: mint_denom is the denom of the coin to mint.
+          genesis_epoch_provision:
+            type: string
+            description: genesis epoch provision from the first epoch.
+          epoch_identifier:
+            type: string
+            title: >-
+              epoch identifier is the mint epoch identifier e.g. (hour, day,
+              week).
+
+              See module "epoch"
+          reduction_period_epochs:
+            type: string
+            format: int64
+            description: |-
+              reduction period in epochs is the number of epochs it takes
+              to reduce the rewards.
+          reduction_factor:
+            type: string
+            description: |-
+              reduction factor is the reduction multiplier to execute
+              at the end of each period set by reduction period in epochs.
+          distribution:
+            description: >-
+              distribution defines the distribution proportions of the minted
+
+              denom. In other words, defines which stakeholders will receive the
+              minted
+
+              denoms and how much.
+            type: object
+            properties:
+              stakingPool:
+                type: string
+                description: >-
+                  staking pool defines the proportion of the minted mint denom
+                  that is to be
+
+                  allocated as staking rewards.
+              ecosystemPool:
+                type: string
+                description: >-
+                  ecosystem pool defines the proportion of the minted mint denom
+                  that is
+
+                  to be allocated as ecosystem pool incentives.
+              developerPool:
+                type: string
+                title: >-
+                  developer pool defines the proportion of the minted mint
+                  denom 
+
+                  to pay developers for their past and future work
+              rewardPool:
+                type: string
+                description: >-
+                  reward pool defines the proportion of the minted mint denom
+                  that is to be
+
+                  allocated for rewards activities.
+              communityPool:
+                type: string
+                description: >-
+                  community pool defines the proportion of the minted mint denom
+                  that is
+
+                  to be allocated to the community pool incentives.
+          reward_distribution_start_epoch:
+            type: string
+            format: int64
+            title: >-
+              minting rewards distribution start epoch defines start epoch to
+              distribute minting
+
+              rewards
+          ecosystem_pool_address:
+            type: string
+            title: |-
+              The ecosystem pool address to send the reward to
+              If empty the minted coin will be send to community pool
+          developer_pool_address:
+            type: string
+            title: |-
+              The developer pool address to send the reward to
+              If empty the minted coin will be send to community pool
+          reward_pool_address:
+            type: string
+            title: |-
+              The reward pool address to send the reward to
+              If empty the minted coin will be send to community pool
     description: QueryParamsResponse is response type for the Query/Params RPC method.
