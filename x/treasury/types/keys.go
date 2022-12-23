@@ -26,3 +26,8 @@ const (
 	MinterKey= "Minter/value/"
 	MinterCountKey= "Minter/count/"
 )
+
+const (
+	DistributionKey= "Distribution/value/"
+	DistributionCountKey= "Distribution/count/"
+)

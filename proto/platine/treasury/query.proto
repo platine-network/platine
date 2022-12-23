@@ -3,9 +3,7 @@ package platinenetwork.platine.treasury;
 
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "cosmos/base/query/v1beta1/pagination.proto";
 import "platine/treasury/params.proto";
-import "platine/treasury/minter.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "github.com/platine-network/platine/x/treasury/types";
@@ -16,14 +14,9 @@ service Query {
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/platine/treasury/params";
   }
-  // Queries a Minter by id.
-	rpc Minter(QueryGetMinterRequest) returns (QueryGetMinterResponse) {
-		option (google.api.http).get = "/platine-network/platine/treasury/minter/{id}";
-	}
-
-	// Queries a list of Minter items.
-	rpc MinterAll(QueryAllMinterRequest) returns (QueryAllMinterResponse) {
-		option (google.api.http).get = "/platine-network/platine/treasury/minter";
+  // Returns the current minting epoch provisions value
+	rpc EpochProvision(QueryEpochProvisionRequest) returns (QueryEpochProvisionResponse) {
+		option (google.api.http).get = "/platine/treasury/epoch_provision";
 	}
 
 // this line is used by starport scaffolding # 2
@@ -38,21 +31,15 @@ message QueryParamsResponse {
   Params params = 1 [(gogoproto.nullable) = false];
 }
 
-message QueryGetMinterRequest {
-	uint64 id = 1;
+message QueryEpochProvisionRequest {
 }
 
-message QueryGetMinterResponse {
-	Minter Minter = 1 [(gogoproto.nullable) = false];
+message QueryEpochProvisionResponse {
+	bytes epoch_provision = 1 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
 }
 
-message QueryAllMinterRequest {
-	cosmos.base.query.v1beta1.PageRequest pagination = 1;
-}
-
-message QueryAllMinterResponse {
-	repeated Minter Minter = 1 [(gogoproto.nullable) = false];
-	cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
 
 // this line is used by starport scaffolding # 3

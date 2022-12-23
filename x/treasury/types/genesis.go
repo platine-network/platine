@@ -11,6 +11,7 @@ const DefaultIndex uint64 = 1
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 	    MinterList: []Minter{},
+DistributionList: []Distribution{},
 // this line is used by starport scaffolding # genesis/types/default
 	    Params:	DefaultParams(),
 	}
@@ -30,6 +31,18 @@ for _, elem := range gs.MinterList {
 		return fmt.Errorf("minter id should be lower or equal than the last id")
 	}
 	minterIdMap[elem.Id] = true
+}
+// Check for duplicated ID in distribution
+distributionIdMap := make(map[uint64]bool)
+distributionCount := gs.GetDistributionCount()
+for _, elem := range gs.DistributionList {
+	if _, ok := distributionIdMap[elem.Id]; ok {
+		return fmt.Errorf("duplicated id for distribution")
+	}
+	if elem.Id >= distributionCount {
+		return fmt.Errorf("distribution id should be lower or equal than the last id")
+	}
+	distributionIdMap[elem.Id] = true
 }
 // this line is used by starport scaffolding # genesis/types/validate
 

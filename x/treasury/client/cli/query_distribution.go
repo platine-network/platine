@@ -10,10 +10,10 @@ import (
     "github.com/platine-network/platine/x/treasury/types"
 )
 
-func CmdListMinter() *cobra.Command {
+func CmdListDistribution() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "list-minter",
-		Short: "list all minter",
+		Use:   "list-distribution",
+		Short: "list all distribution",
 		RunE: func(cmd *cobra.Command, args []string) error {
             clientCtx := client.GetClientContextFromCmd(cmd)
 
@@ -24,11 +24,11 @@ func CmdListMinter() *cobra.Command {
 
             queryClient := types.NewQueryClient(clientCtx)
 
-            params := &types.QueryAllMinterRequest{
+            params := &types.QueryAllDistributionRequest{
                 Pagination: pageReq,
             }
 
-            res, err := queryClient.MinterAll(context.Background(), params)
+            res, err := queryClient.DistributionAll(context.Background(), params)
             if err != nil {
                 return err
             }
@@ -43,10 +43,10 @@ func CmdListMinter() *cobra.Command {
     return cmd
 }
 
-func CmdShowMinter() *cobra.Command {
+func CmdShowDistribution() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "show-minter [id]",
-		Short: "shows a minter",
+		Use:   "show-distribution [id]",
+		Short: "shows a distribution",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
             clientCtx := client.GetClientContextFromCmd(cmd)
@@ -58,11 +58,11 @@ func CmdShowMinter() *cobra.Command {
                 return err
             }
 
-            params := &types.QueryGetMinterRequest{
+            params := &types.QueryGetDistributionRequest{
                 Id: id,
             }
 
-            res, err := queryClient.Minter(context.Background(), params)
+            res, err := queryClient.Distribution(context.Background(), params)
             if err != nil {
                 return err
             }

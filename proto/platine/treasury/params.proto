@@ -2,6 +2,7 @@ syntax = "proto3";
 package platinenetwork.platine.treasury;
 
 import "gogoproto/gogo.proto";
+import "platine/treasury/distribution.proto";
 
 option go_package = "github.com/platine-network/platine/x/treasury/types";
 
@@ -9,4 +10,72 @@ option go_package = "github.com/platine-network/platine/x/treasury/types";
 message Params {
   option (gogoproto.goproto_stringer) = false;
   
+  // mint_denom is the denom of the coin to mint.
+  string mint_denom = 1;
+
+  // genesis epoch provision from the first epoch.
+  string genesis_epoch_provision = 2 [
+    (gogoproto.moretags) = "yaml:\"genesis_epoch_provision\"",
+    (gogoproto.jsontag) = "genesis_epoch_provision,omitempty",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+
+  // epoch identifier is the mint epoch identifier e.g. (hour, day, week).
+  // See module "epoch"
+  string epoch_identifier = 3 [
+    (gogoproto.moretags) = "yaml:\"epoch_identifier\"",
+    (gogoproto.jsontag) = "epoch_identifier,omitempty"
+  ];
+
+  // reduction period in epochs is the number of epochs it takes
+  // to reduce the rewards.
+  int64 reduction_period_epochs = 4 [
+    (gogoproto.moretags) = "yaml:\"reduction_period_epochs\"",
+    (gogoproto.jsontag) = "reduction_period_epochs,omitempty"
+  ];
+
+  // reduction factor is the reduction multiplier to execute
+  // at the end of each period set by reduction period in epochs.
+  string reduction_factor = 5 [
+    (gogoproto.moretags) = "yaml:\"reduction_factor\"",
+    (gogoproto.jsontag) = "reduction_factor,omitempty",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+
+  // distribution defines the distribution proportions of the minted
+  // denom. In other words, defines which stakeholders will receive the minted
+  // denoms and how much.
+  Distribution distribution = 6 [
+    (gogoproto.nullable) = false
+  ];
+
+  // minting rewards distribution start epoch defines start epoch to distribute minting
+  // rewards
+  int64 reward_distribution_start_epoch = 7 [
+    (gogoproto.moretags) = "yaml:\"reward_distribution_start_epoch\"",
+    (gogoproto.jsontag) = "reward_distribution_start_epoch,omitempty"
+  ];
+
+  // The ecosystem pool address to send the reward to
+  // If empty the minted coin will be send to community pool 
+  string ecosystem_pool_address = 8 [
+    (gogoproto.moretags) = "yaml:\"ecosystem_pool_address\"",
+    (gogoproto.jsontag) = "ecosystem_pool_address,omitempty"
+  ];
+
+  // The developer pool address to send the reward to
+  // If empty the minted coin will be send to community pool 
+  string developer_pool_address = 9 [
+    (gogoproto.moretags) = "yaml:\"developer_pool_address\"",
+    (gogoproto.jsontag) = "developer_pool_address,omitempty"
+  ];
+
+  // The reward pool address to send the reward to
+  // If empty the minted coin will be send to community pool 
+  string reward_pool_address = 10 [
+    (gogoproto.moretags) = "yaml:\"reward_pool_address\"",
+    (gogoproto.jsontag) = "reward_pool_address,omitempty"
+  ];
 }

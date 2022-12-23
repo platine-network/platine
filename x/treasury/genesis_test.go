@@ -23,6 +23,15 @@ func TestGenesis(t *testing.T) {
 		},
 	},
 	MinterCount: 2,
+	DistributionList: []types.Distribution{
+		{
+			Id: 0,
+		},
+		{
+			Id: 1,
+		},
+	},
+	DistributionCount: 2,
 	// this line is used by starport scaffolding # genesis/test/state
 	}
 
@@ -38,5 +47,7 @@ func TestGenesis(t *testing.T) {
 
 	require.ElementsMatch(t, genesisState.MinterList, got.MinterList)
 require.Equal(t, genesisState.MinterCount, got.MinterCount)
+require.ElementsMatch(t, genesisState.DistributionList, got.DistributionList)
+require.Equal(t, genesisState.DistributionCount, got.DistributionCount)
 // this line is used by starport scaffolding # genesis/test/assert
 }

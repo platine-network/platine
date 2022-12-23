@@ -10,8 +10,16 @@ option go_package = "github.com/platine-network/platine/x/treasury/types";
 
 // GenesisState defines the treasury module's genesis state.
 message GenesisState {
+  // params defines all the paramaters of the treasury module.
   Params params = 1 [(gogoproto.nullable) = false];
-  repeated Minter minterList = 2 [(gogoproto.nullable) = false];
-  uint64 minterCount = 3;
+
+  // minter is an abstraction for holding current rewards information.
+  Minter minter = 2 [(gogoproto.nullable) = false];
+
+  // reduction start epoch is the first epoch in which the reduction of mint begins.
+  int64 reductionStartEpoch = 3 [
+    (gogoproto.moretags) = "yaml:\"reduction_start_epoch\"",
+    (gogoproto.jsontag) = "reduction_start_epoch,omitempty"
+  ];
   // this line is used by starport scaffolding # genesis/proto/state
 }

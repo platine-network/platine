@@ -15,6 +15,13 @@ for _, elem := range genState.MinterList {
 
 // Set minter count
 k.SetMinterCount(ctx, genState.MinterCount)
+// Set all the distribution
+for _, elem := range genState.DistributionList {
+	k.SetDistribution(ctx, elem)
+}
+
+// Set distribution count
+k.SetDistributionCount(ctx, genState.DistributionCount)
 // this line is used by starport scaffolding # genesis/module/init
 	k.SetParams(ctx, genState.Params)
 }
@@ -26,6 +33,8 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 
     genesis.MinterList = k.GetAllMinter(ctx)
 genesis.MinterCount = k.GetMinterCount(ctx)
+genesis.DistributionList = k.GetAllDistribution(ctx)
+genesis.DistributionCount = k.GetDistributionCount(ctx)
 // this line is used by starport scaffolding # genesis/module/export
 
     return genesis

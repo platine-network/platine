@@ -1,0 +1,52 @@
+syntax = "proto3";
+package platinenetwork.platine.treasury;
+
+import "gogoproto/gogo.proto";
+option go_package = "github.com/platine-network/platine/x/treasury/types";
+
+message Distribution {
+  // staking pool defines the proportion of the minted mint denom that is to be
+  // allocated as staking rewards.
+  string stakingPool = 1 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.moretags) = "yaml:\"staking_pool\"",
+    (gogoproto.jsontag) = "staking_pool,omitempty",
+    (gogoproto.nullable) = false
+  ]; 
+
+  // ecosystem pool defines the proportion of the minted mint denom that is
+  // to be allocated as ecosystem pool incentives.
+  string ecosystemPool = 2 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.moretags) = "yaml:\"ecosystem_pool\"",
+    (gogoproto.jsontag) = "ecosystem_pool,omitempty",
+    (gogoproto.nullable) = false
+  ]; 
+
+  // developer pool defines the proportion of the minted mint denom 
+  // to pay developers for their past and future work
+  string developerPool = 3 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.moretags) = "yaml:\"developer_pool\"",
+    (gogoproto.jsontag) = "developer_pool,omitempty",
+    (gogoproto.nullable) = false
+  ]; 
+
+  // reward pool defines the proportion of the minted mint denom that is to be
+  // allocated for rewards activities.
+  string rewardPool = 4 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.moretags) = "yaml:\"reward_pool\"",
+    (gogoproto.jsontag) = "reward_pool,omitempty",
+    (gogoproto.nullable) = false
+  ]; 
+
+  // community pool defines the proportion of the minted mint denom that is
+  // to be allocated to the community pool incentives.
+  string communityPool = 5 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.moretags) = "yaml:\"community_pool\"",
+    (gogoproto.jsontag) = "community_pool,omitempty",
+    (gogoproto.nullable) = false
+  ]; 
+}

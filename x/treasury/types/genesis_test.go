@@ -31,6 +31,15 @@ func TestGenesisState_Validate(t *testing.T) {
 	},
 },
 MinterCount: 2,
+DistributionList: []types.Distribution{
+	{
+		Id: 0,
+	},
+	{
+		Id: 1,
+	},
+},
+DistributionCount: 2,
 // this line is used by starport scaffolding # types/genesis/validField
             },
             valid:    true,
@@ -58,6 +67,32 @@ MinterCount: 2,
 			},
 		},
 		MinterCount: 0,
+	},
+	valid:    false,
+},
+{
+	desc:     "duplicated distribution",
+	genState: &types.GenesisState{
+		DistributionList: []types.Distribution{
+			{
+				Id: 0,
+			},
+			{
+				Id: 0,
+			},
+		},
+	},
+	valid:    false,
+},
+{
+	desc:     "invalid distribution count",
+	genState: &types.GenesisState{
+		DistributionList: []types.Distribution{
+			{
+				Id: 1,
+			},
+		},
+		DistributionCount: 0,
 	},
 	valid:    false,
 },

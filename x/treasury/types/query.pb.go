@@ -6,7 +6,7 @@ package types
 import (
 	context "context"
 	fmt "fmt"
-	query "github.com/cosmos/cosmos-sdk/types/query"
+	github_com_cosmos_cosmos_sdk_types "github.com/cosmos/cosmos-sdk/types"
 	_ "github.com/gogo/protobuf/gogoproto"
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
@@ -113,22 +113,21 @@ func (m *QueryParamsResponse) GetParams() Params {
 	return Params{}
 }
 
-type QueryGetMinterRequest struct {
-	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+type QueryEpochProvisionRequest struct {
 }
 
-func (m *QueryGetMinterRequest) Reset()         { *m = QueryGetMinterRequest{} }
-func (m *QueryGetMinterRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryGetMinterRequest) ProtoMessage()    {}
-func (*QueryGetMinterRequest) Descriptor() ([]byte, []int) {
+func (m *QueryEpochProvisionRequest) Reset()         { *m = QueryEpochProvisionRequest{} }
+func (m *QueryEpochProvisionRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryEpochProvisionRequest) ProtoMessage()    {}
+func (*QueryEpochProvisionRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_03a61f9f849ee6cb, []int{2}
 }
-func (m *QueryGetMinterRequest) XXX_Unmarshal(b []byte) error {
+func (m *QueryEpochProvisionRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryGetMinterRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryEpochProvisionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryGetMinterRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryEpochProvisionRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -138,41 +137,34 @@ func (m *QueryGetMinterRequest) XXX_Marshal(b []byte, deterministic bool) ([]byt
 		return b[:n], nil
 	}
 }
-func (m *QueryGetMinterRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryGetMinterRequest.Merge(m, src)
+func (m *QueryEpochProvisionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryEpochProvisionRequest.Merge(m, src)
 }
-func (m *QueryGetMinterRequest) XXX_Size() int {
+func (m *QueryEpochProvisionRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryGetMinterRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryGetMinterRequest.DiscardUnknown(m)
+func (m *QueryEpochProvisionRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryEpochProvisionRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryGetMinterRequest proto.InternalMessageInfo
+var xxx_messageInfo_QueryEpochProvisionRequest proto.InternalMessageInfo
 
-func (m *QueryGetMinterRequest) GetId() uint64 {
-	if m != nil {
-		return m.Id
-	}
-	return 0
+type QueryEpochProvisionResponse struct {
+	EpochProvision github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,1,opt,name=epoch_provision,json=epochProvision,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"epoch_provision"`
 }
 
-type QueryGetMinterResponse struct {
-	Minter Minter `protobuf:"bytes,1,opt,name=Minter,proto3" json:"Minter"`
-}
-
-func (m *QueryGetMinterResponse) Reset()         { *m = QueryGetMinterResponse{} }
-func (m *QueryGetMinterResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryGetMinterResponse) ProtoMessage()    {}
-func (*QueryGetMinterResponse) Descriptor() ([]byte, []int) {
+func (m *QueryEpochProvisionResponse) Reset()         { *m = QueryEpochProvisionResponse{} }
+func (m *QueryEpochProvisionResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryEpochProvisionResponse) ProtoMessage()    {}
+func (*QueryEpochProvisionResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_03a61f9f849ee6cb, []int{3}
 }
-func (m *QueryGetMinterResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryEpochProvisionResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryGetMinterResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryEpochProvisionResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryGetMinterResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryEpochProvisionResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -182,165 +174,54 @@ func (m *QueryGetMinterResponse) XXX_Marshal(b []byte, deterministic bool) ([]by
 		return b[:n], nil
 	}
 }
-func (m *QueryGetMinterResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryGetMinterResponse.Merge(m, src)
+func (m *QueryEpochProvisionResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryEpochProvisionResponse.Merge(m, src)
 }
-func (m *QueryGetMinterResponse) XXX_Size() int {
+func (m *QueryEpochProvisionResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryGetMinterResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryGetMinterResponse.DiscardUnknown(m)
+func (m *QueryEpochProvisionResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryEpochProvisionResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryGetMinterResponse proto.InternalMessageInfo
-
-func (m *QueryGetMinterResponse) GetMinter() Minter {
-	if m != nil {
-		return m.Minter
-	}
-	return Minter{}
-}
-
-type QueryAllMinterRequest struct {
-	Pagination *query.PageRequest `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
-}
-
-func (m *QueryAllMinterRequest) Reset()         { *m = QueryAllMinterRequest{} }
-func (m *QueryAllMinterRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryAllMinterRequest) ProtoMessage()    {}
-func (*QueryAllMinterRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_03a61f9f849ee6cb, []int{4}
-}
-func (m *QueryAllMinterRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryAllMinterRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryAllMinterRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryAllMinterRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryAllMinterRequest.Merge(m, src)
-}
-func (m *QueryAllMinterRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryAllMinterRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryAllMinterRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryAllMinterRequest proto.InternalMessageInfo
-
-func (m *QueryAllMinterRequest) GetPagination() *query.PageRequest {
-	if m != nil {
-		return m.Pagination
-	}
-	return nil
-}
-
-type QueryAllMinterResponse struct {
-	Minter     []Minter            `protobuf:"bytes,1,rep,name=Minter,proto3" json:"Minter"`
-	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
-}
-
-func (m *QueryAllMinterResponse) Reset()         { *m = QueryAllMinterResponse{} }
-func (m *QueryAllMinterResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryAllMinterResponse) ProtoMessage()    {}
-func (*QueryAllMinterResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_03a61f9f849ee6cb, []int{5}
-}
-func (m *QueryAllMinterResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryAllMinterResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryAllMinterResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryAllMinterResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryAllMinterResponse.Merge(m, src)
-}
-func (m *QueryAllMinterResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryAllMinterResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryAllMinterResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryAllMinterResponse proto.InternalMessageInfo
-
-func (m *QueryAllMinterResponse) GetMinter() []Minter {
-	if m != nil {
-		return m.Minter
-	}
-	return nil
-}
-
-func (m *QueryAllMinterResponse) GetPagination() *query.PageResponse {
-	if m != nil {
-		return m.Pagination
-	}
-	return nil
-}
+var xxx_messageInfo_QueryEpochProvisionResponse proto.InternalMessageInfo
 
 func init() {
 	proto.RegisterType((*QueryParamsRequest)(nil), "platinenetwork.platine.treasury.QueryParamsRequest")
 	proto.RegisterType((*QueryParamsResponse)(nil), "platinenetwork.platine.treasury.QueryParamsResponse")
-	proto.RegisterType((*QueryGetMinterRequest)(nil), "platinenetwork.platine.treasury.QueryGetMinterRequest")
-	proto.RegisterType((*QueryGetMinterResponse)(nil), "platinenetwork.platine.treasury.QueryGetMinterResponse")
-	proto.RegisterType((*QueryAllMinterRequest)(nil), "platinenetwork.platine.treasury.QueryAllMinterRequest")
-	proto.RegisterType((*QueryAllMinterResponse)(nil), "platinenetwork.platine.treasury.QueryAllMinterResponse")
+	proto.RegisterType((*QueryEpochProvisionRequest)(nil), "platinenetwork.platine.treasury.QueryEpochProvisionRequest")
+	proto.RegisterType((*QueryEpochProvisionResponse)(nil), "platinenetwork.platine.treasury.QueryEpochProvisionResponse")
 }
 
 func init() { proto.RegisterFile("platine/treasury/query.proto", fileDescriptor_03a61f9f849ee6cb) }
 
 var fileDescriptor_03a61f9f849ee6cb = []byte{
-	// 493 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x94, 0xcf, 0x6b, 0x14, 0x31,
-	0x14, 0xc7, 0x37, 0xeb, 0xba, 0x60, 0x04, 0x0f, 0xb1, 0x4a, 0x19, 0xea, 0xb4, 0xe4, 0x60, 0x4b,
-	0xa1, 0x89, 0xed, 0xfa, 0xe3, 0xdc, 0x82, 0xf6, 0x54, 0xa8, 0x73, 0x14, 0xa1, 0x64, 0xba, 0x61,
-	0x0c, 0xce, 0x24, 0xd3, 0x49, 0x46, 0x5d, 0xc4, 0x8b, 0xfe, 0x03, 0x82, 0xf8, 0x3f, 0x78, 0x12,
-	0xff, 0x8c, 0x1e, 0x0b, 0x5e, 0x3c, 0x89, 0xec, 0xfa, 0x87, 0xc8, 0x26, 0x19, 0xf6, 0x97, 0xc3,
-	0x4e, 0x7b, 0xdb, 0xe4, 0xbd, 0xef, 0xf7, 0x7d, 0x5e, 0xde, 0xdb, 0x81, 0x6b, 0x79, 0xca, 0x8c,
-	0x90, 0x9c, 0x9a, 0x82, 0x33, 0x5d, 0x16, 0x03, 0x7a, 0x56, 0xf2, 0x62, 0x40, 0xf2, 0x42, 0x19,
-	0x85, 0xd6, 0x7d, 0x54, 0x72, 0xf3, 0x56, 0x15, 0xaf, 0x89, 0x3f, 0x92, 0x2a, 0x39, 0x58, 0x49,
-	0x54, 0xa2, 0x6c, 0x2e, 0x1d, 0xff, 0x72, 0xb2, 0x60, 0x2d, 0x51, 0x2a, 0x49, 0x39, 0x65, 0xb9,
-	0xa0, 0x4c, 0x4a, 0x65, 0x98, 0x11, 0x4a, 0x6a, 0x1f, 0xdd, 0x3e, 0x55, 0x3a, 0x53, 0x9a, 0xc6,
-	0x4c, 0x73, 0x57, 0x8d, 0xbe, 0xd9, 0x8d, 0xb9, 0x61, 0xbb, 0x34, 0x67, 0x89, 0x90, 0x36, 0xd9,
-	0xe7, 0xde, 0x5b, 0xc0, 0xcb, 0x59, 0xc1, 0x32, 0x5d, 0x1b, 0xce, 0x84, 0x34, 0xbc, 0x70, 0x61,
-	0xbc, 0x02, 0xd1, 0xf3, 0xb1, 0xff, 0xb1, 0xd5, 0x44, 0xfc, 0xac, 0xe4, 0xda, 0xe0, 0x97, 0xf0,
-	0xf6, 0xcc, 0xad, 0xce, 0x95, 0xd4, 0x1c, 0x3d, 0x85, 0x5d, 0xe7, 0xbd, 0x0a, 0x36, 0xc0, 0xd6,
-	0xcd, 0xbd, 0x4d, 0xb2, 0xa4, 0x79, 0xe2, 0x0c, 0x0e, 0x3a, 0xe7, 0xbf, 0xd7, 0x5b, 0x91, 0x17,
-	0xe3, 0x4d, 0x78, 0xc7, 0xba, 0x1f, 0x72, 0x73, 0x64, 0x59, 0x7c, 0x59, 0x74, 0x0b, 0xb6, 0x45,
-	0xdf, 0x7a, 0x77, 0xa2, 0xb6, 0xe8, 0xe3, 0x13, 0x78, 0x77, 0x3e, 0x71, 0x42, 0xe2, 0x6e, 0x1a,
-	0x93, 0xb8, 0xf4, 0x8a, 0xc4, 0x9d, 0xf0, 0x89, 0x27, 0xd9, 0x4f, 0xd3, 0x59, 0x92, 0x67, 0x10,
-	0x4e, 0x1e, 0xda, 0xd7, 0xb8, 0x4f, 0xdc, 0x54, 0xc8, 0x78, 0x2a, 0xc4, 0xed, 0x80, 0x9f, 0x0a,
-	0x39, 0x66, 0x09, 0xf7, 0xda, 0x68, 0x4a, 0x89, 0xbf, 0x01, 0xdf, 0xc2, 0x54, 0x85, 0xff, 0xb4,
-	0x70, 0xed, 0xca, 0x2d, 0xa0, 0xc3, 0x19, 0xd2, 0xb6, 0x7f, 0x8d, 0x65, 0xa4, 0x8e, 0x61, 0x1a,
-	0x75, 0xef, 0x53, 0x07, 0x5e, 0xb7, 0xa8, 0xe8, 0x2b, 0x80, 0x5d, 0x37, 0x38, 0xd4, 0x5b, 0x0a,
-	0xb5, 0xb8, 0x3d, 0xc1, 0xc3, 0xcb, 0x89, 0x1c, 0x0b, 0xde, 0xf8, 0xf8, 0xf3, 0xef, 0x97, 0x76,
-	0x80, 0x56, 0x69, 0xcd, 0x42, 0xa3, 0x1f, 0xa0, 0x7a, 0x32, 0xf4, 0xb8, 0x59, 0x89, 0xf9, 0x0d,
-	0x0b, 0x9e, 0x5c, 0x5a, 0xe7, 0xe9, 0x1e, 0x59, 0x3a, 0x8a, 0x76, 0x2a, 0xba, 0x1d, 0xef, 0x40,
-	0x6b, 0xfe, 0x5f, 0xf4, 0xbd, 0xe8, 0x7f, 0x40, 0xdf, 0x01, 0xbc, 0xe1, 0x9c, 0xf6, 0xd3, 0xb4,
-	0x29, 0xf5, 0xfc, 0x36, 0x36, 0xa5, 0x5e, 0xd8, 0x31, 0xfc, 0xc0, 0x52, 0x6f, 0xa3, 0xad, 0xa6,
-	0xd4, 0x07, 0x47, 0xe7, 0xc3, 0x10, 0x5c, 0x0c, 0x43, 0xf0, 0x67, 0x18, 0x82, 0xcf, 0xa3, 0xb0,
-	0x75, 0x31, 0x0a, 0x5b, 0xbf, 0x46, 0x61, 0xeb, 0x45, 0x2f, 0x11, 0xe6, 0x55, 0x19, 0x93, 0x53,
-	0x95, 0xd5, 0xba, 0xbd, 0x9b, 0xf8, 0x99, 0x41, 0xce, 0x75, 0xdc, 0xb5, 0x5f, 0x99, 0xde, 0xbf,
-	0x00, 0x00, 0x00, 0xff, 0xff, 0x16, 0x04, 0xcd, 0x55, 0x44, 0x05, 0x00, 0x00,
+	// 393 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x29, 0xc8, 0x49, 0x2c,
+	0xc9, 0xcc, 0x4b, 0xd5, 0x2f, 0x29, 0x4a, 0x4d, 0x2c, 0x2e, 0x2d, 0xaa, 0xd4, 0x2f, 0x2c, 0x4d,
+	0x2d, 0xaa, 0xd4, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x92, 0x87, 0xca, 0xe6, 0xa5, 0x96, 0x94,
+	0xe7, 0x17, 0x65, 0xeb, 0x41, 0xb9, 0x7a, 0x30, 0xc5, 0x52, 0x22, 0xe9, 0xf9, 0xe9, 0xf9, 0x60,
+	0xb5, 0xfa, 0x20, 0x16, 0x44, 0x9b, 0x94, 0x4c, 0x7a, 0x7e, 0x7e, 0x7a, 0x4e, 0xaa, 0x7e, 0x62,
+	0x41, 0xa6, 0x7e, 0x62, 0x5e, 0x5e, 0x7e, 0x49, 0x62, 0x49, 0x66, 0x7e, 0x5e, 0x31, 0x54, 0x56,
+	0x16, 0xc3, 0xca, 0x82, 0xc4, 0xa2, 0xc4, 0x5c, 0xa8, 0xb4, 0x92, 0x08, 0x97, 0x50, 0x20, 0xc8,
+	0x09, 0x01, 0x60, 0xc1, 0xa0, 0xd4, 0xc2, 0xd2, 0xd4, 0xe2, 0x12, 0xa5, 0x18, 0x2e, 0x61, 0x14,
+	0xd1, 0xe2, 0x82, 0xfc, 0xbc, 0xe2, 0x54, 0x21, 0x57, 0x2e, 0x36, 0x88, 0x66, 0x09, 0x46, 0x05,
+	0x46, 0x0d, 0x6e, 0x23, 0x75, 0x3d, 0x02, 0x2e, 0xd6, 0x83, 0x18, 0xe0, 0xc4, 0x72, 0xe2, 0x9e,
+	0x3c, 0x43, 0x10, 0x54, 0xb3, 0x92, 0x0c, 0x97, 0x14, 0xd8, 0x74, 0xd7, 0x82, 0xfc, 0xe4, 0x8c,
+	0x80, 0xa2, 0xfc, 0xb2, 0xcc, 0xe2, 0xcc, 0xfc, 0x3c, 0x98, 0xdd, 0x65, 0x5c, 0xd2, 0x58, 0x65,
+	0xa1, 0x6e, 0x08, 0xe7, 0xe2, 0x4f, 0x05, 0xc9, 0xc4, 0x17, 0xc0, 0xa4, 0xc0, 0x8e, 0xe1, 0x71,
+	0xd2, 0x03, 0xd9, 0x71, 0xeb, 0x9e, 0xbc, 0x5a, 0x7a, 0x66, 0x49, 0x46, 0x69, 0x92, 0x5e, 0x72,
+	0x7e, 0xae, 0x7e, 0x72, 0x7e, 0x71, 0x6e, 0x7e, 0x31, 0x94, 0xd2, 0x2d, 0x4e, 0xc9, 0xd6, 0x2f,
+	0xa9, 0x2c, 0x48, 0x2d, 0xd6, 0x73, 0x49, 0x4d, 0x0e, 0xe2, 0x4b, 0x45, 0xb1, 0xc0, 0xe8, 0x06,
+	0x13, 0x17, 0x2b, 0xd8, 0x62, 0xa1, 0xa9, 0x8c, 0x5c, 0x6c, 0x10, 0x87, 0x0b, 0x19, 0x13, 0xf4,
+	0x21, 0x66, 0xe8, 0x49, 0x99, 0x90, 0xa6, 0x09, 0xe2, 0x31, 0x25, 0x85, 0xa6, 0xcb, 0x4f, 0x26,
+	0x33, 0x49, 0x09, 0x49, 0xe8, 0xe3, 0x88, 0x31, 0xa1, 0x6d, 0x8c, 0x5c, 0x7c, 0xa8, 0xa1, 0x22,
+	0x64, 0x4d, 0x9c, 0x55, 0x58, 0x43, 0x5a, 0xca, 0x86, 0x3c, 0xcd, 0x50, 0xf7, 0x6a, 0x82, 0xdd,
+	0xab, 0x2c, 0xa4, 0x88, 0xe9, 0x5e, 0xb4, 0x08, 0x72, 0xf2, 0x3d, 0xf1, 0x48, 0x8e, 0xf1, 0xc2,
+	0x23, 0x39, 0xc6, 0x07, 0x8f, 0xe4, 0x18, 0x27, 0x3c, 0x96, 0x63, 0xb8, 0xf0, 0x58, 0x8e, 0xe1,
+	0xc6, 0x63, 0x39, 0x86, 0x28, 0x63, 0xa4, 0xc8, 0x82, 0x1a, 0xa3, 0x0b, 0x75, 0x0d, 0xdc, 0xd8,
+	0x0a, 0x84, 0xc1, 0xe0, 0xd8, 0x4b, 0x62, 0x03, 0x27, 0x5d, 0x63, 0x40, 0x00, 0x00, 0x00, 0xff,
+	0xff, 0x00, 0xe1, 0xc0, 0xd2, 0x4e, 0x03, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -357,10 +238,8 @@ const _ = grpc.SupportPackageIsVersion4
 type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
-	// Queries a Minter by id.
-	Minter(ctx context.Context, in *QueryGetMinterRequest, opts ...grpc.CallOption) (*QueryGetMinterResponse, error)
-	// Queries a list of Minter items.
-	MinterAll(ctx context.Context, in *QueryAllMinterRequest, opts ...grpc.CallOption) (*QueryAllMinterResponse, error)
+	// Returns the current minting epoch provisions value
+	EpochProvision(ctx context.Context, in *QueryEpochProvisionRequest, opts ...grpc.CallOption) (*QueryEpochProvisionResponse, error)
 }
 
 type queryClient struct {
@@ -380,18 +259,9 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
-func (c *queryClient) Minter(ctx context.Context, in *QueryGetMinterRequest, opts ...grpc.CallOption) (*QueryGetMinterResponse, error) {
-	out := new(QueryGetMinterResponse)
-	err := c.cc.Invoke(ctx, "/platinenetwork.platine.treasury.Query/Minter", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *queryClient) MinterAll(ctx context.Context, in *QueryAllMinterRequest, opts ...grpc.CallOption) (*QueryAllMinterResponse, error) {
-	out := new(QueryAllMinterResponse)
-	err := c.cc.Invoke(ctx, "/platinenetwork.platine.treasury.Query/MinterAll", in, out, opts...)
+func (c *queryClient) EpochProvision(ctx context.Context, in *QueryEpochProvisionRequest, opts ...grpc.CallOption) (*QueryEpochProvisionResponse, error) {
+	out := new(QueryEpochProvisionResponse)
+	err := c.cc.Invoke(ctx, "/platinenetwork.platine.treasury.Query/EpochProvision", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -402,10 +272,8 @@ func (c *queryClient) MinterAll(ctx context.Context, in *QueryAllMinterRequest, 
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
-	// Queries a Minter by id.
-	Minter(context.Context, *QueryGetMinterRequest) (*QueryGetMinterResponse, error)
-	// Queries a list of Minter items.
-	MinterAll(context.Context, *QueryAllMinterRequest) (*QueryAllMinterResponse, error)
+	// Returns the current minting epoch provisions value
+	EpochProvision(context.Context, *QueryEpochProvisionRequest) (*QueryEpochProvisionResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -415,11 +283,8 @@ type UnimplementedQueryServer struct {
 func (*UnimplementedQueryServer) Params(ctx context.Context, req *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
 }
-func (*UnimplementedQueryServer) Minter(ctx context.Context, req *QueryGetMinterRequest) (*QueryGetMinterResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Minter not implemented")
-}
-func (*UnimplementedQueryServer) MinterAll(ctx context.Context, req *QueryAllMinterRequest) (*QueryAllMinterResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MinterAll not implemented")
+func (*UnimplementedQueryServer) EpochProvision(ctx context.Context, req *QueryEpochProvisionRequest) (*QueryEpochProvisionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EpochProvision not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -444,38 +309,20 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_Minter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryGetMinterRequest)
+func _Query_EpochProvision_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryEpochProvisionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).Minter(ctx, in)
+		return srv.(QueryServer).EpochProvision(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/platinenetwork.platine.treasury.Query/Minter",
+		FullMethod: "/platinenetwork.platine.treasury.Query/EpochProvision",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Minter(ctx, req.(*QueryGetMinterRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Query_MinterAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryAllMinterRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).MinterAll(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/platinenetwork.platine.treasury.Query/MinterAll",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).MinterAll(ctx, req.(*QueryAllMinterRequest))
+		return srv.(QueryServer).EpochProvision(ctx, req.(*QueryEpochProvisionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -489,12 +336,8 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Params_Handler,
 		},
 		{
-			MethodName: "Minter",
-			Handler:    _Query_Minter_Handler,
-		},
-		{
-			MethodName: "MinterAll",
-			Handler:    _Query_MinterAll_Handler,
+			MethodName: "EpochProvision",
+			Handler:    _Query_EpochProvision_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -557,7 +400,7 @@ func (m *QueryParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryGetMinterRequest) Marshal() (dAtA []byte, err error) {
+func (m *QueryEpochProvisionRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -567,25 +410,20 @@ func (m *QueryGetMinterRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryGetMinterRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryEpochProvisionRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryGetMinterRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryEpochProvisionRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Id != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.Id))
-		i--
-		dAtA[i] = 0x8
-	}
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryGetMinterResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryEpochProvisionResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -595,110 +433,26 @@ func (m *QueryGetMinterResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryGetMinterResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryEpochProvisionResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryGetMinterResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryEpochProvisionResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	{
-		size, err := m.Minter.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
+		size := m.EpochProvision.Size()
+		i -= size
+		if _, err := m.EpochProvision.MarshalTo(dAtA[i:]); err != nil {
 			return 0, err
 		}
-		i -= size
 		i = encodeVarintQuery(dAtA, i, uint64(size))
 	}
 	i--
 	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryAllMinterRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryAllMinterRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryAllMinterRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Pagination != nil {
-		{
-			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryAllMinterResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryAllMinterResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryAllMinterResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Pagination != nil {
-		{
-			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Minter) > 0 {
-		for iNdEx := len(m.Minter) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Minter[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintQuery(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
 	return len(dAtA) - i, nil
 }
 
@@ -733,58 +487,23 @@ func (m *QueryParamsResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryGetMinterRequest) Size() (n int) {
+func (m *QueryEpochProvisionRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.Id != 0 {
-		n += 1 + sovQuery(uint64(m.Id))
-	}
 	return n
 }
 
-func (m *QueryGetMinterResponse) Size() (n int) {
+func (m *QueryEpochProvisionResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = m.Minter.Size()
+	l = m.EpochProvision.Size()
 	n += 1 + l + sovQuery(uint64(l))
-	return n
-}
-
-func (m *QueryAllMinterRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Pagination != nil {
-		l = m.Pagination.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
-
-func (m *QueryAllMinterResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Minter) > 0 {
-		for _, e := range m.Minter {
-			l = e.Size()
-			n += 1 + l + sovQuery(uint64(l))
-		}
-	}
-	if m.Pagination != nil {
-		l = m.Pagination.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
 	return n
 }
 
@@ -927,7 +646,7 @@ func (m *QueryParamsResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryGetMinterRequest) Unmarshal(dAtA []byte) error {
+func (m *QueryEpochProvisionRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -950,31 +669,12 @@ func (m *QueryGetMinterRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryGetMinterRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryEpochProvisionRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryGetMinterRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryEpochProvisionRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
-			}
-			m.Id = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Id |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipQuery(dAtA[iNdEx:])
@@ -996,7 +696,7 @@ func (m *QueryGetMinterRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryGetMinterResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryEpochProvisionResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1019,17 +719,17 @@ func (m *QueryGetMinterResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryGetMinterResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryEpochProvisionResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryGetMinterResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryEpochProvisionResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Minter", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field EpochProvision", wireType)
 			}
-			var msglen int
+			var byteLen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowQuery
@@ -1039,228 +739,22 @@ func (m *QueryGetMinterResponse) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= int(b&0x7F) << shift
+				byteLen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if msglen < 0 {
+			if byteLen < 0 {
 				return ErrInvalidLengthQuery
 			}
-			postIndex := iNdEx + msglen
+			postIndex := iNdEx + byteLen
 			if postIndex < 0 {
 				return ErrInvalidLengthQuery
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.Minter.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryAllMinterRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryAllMinterRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryAllMinterRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Pagination == nil {
-				m.Pagination = &query.PageRequest{}
-			}
-			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryAllMinterResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryAllMinterResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryAllMinterResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Minter", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Minter = append(m.Minter, Minter{})
-			if err := m.Minter[len(m.Minter)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Pagination == nil {
-				m.Pagination = &query.PageResponse{}
-			}
-			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.EpochProvision.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

@@ -11,19 +11,19 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func createNMinter(keeper *keeper.Keeper, ctx sdk.Context, n int) []types.Minter {
-	items := make([]types.Minter, n)
+func createNDistribution(keeper *keeper.Keeper, ctx sdk.Context, n int) []types.Distribution {
+	items := make([]types.Distribution, n)
 	for i := range items {
-		items[i].Id = keeper.AppendMinter(ctx, items[i])
+		items[i].Id = keeper.AppendDistribution(ctx, items[i])
 	}
 	return items
 }
 
-func TestMinterGet(t *testing.T) {
+func TestDistributionGet(t *testing.T) {
 	keeper, ctx := keepertest.TreasuryKeeper(t)
-	items := createNMinter(keeper, ctx, 10)
+	items := createNDistribution(keeper, ctx, 10)
 	for _, item := range items {
-		got, found := keeper.GetMinter(ctx, item.Id)
+		got, found := keeper.GetDistribution(ctx, item.Id)
 		require.True(t, found)
 		require.Equal(t,
 			nullify.Fill(&item),
@@ -32,28 +32,28 @@ func TestMinterGet(t *testing.T) {
 	}
 }
 
-func TestMinterRemove(t *testing.T) {
+func TestDistributionRemove(t *testing.T) {
 	keeper, ctx := keepertest.TreasuryKeeper(t)
-	items := createNMinter(keeper, ctx, 10)
+	items := createNDistribution(keeper, ctx, 10)
 	for _, item := range items {
-		keeper.RemoveMinter(ctx, item.Id)
-		_, found := keeper.GetMinter(ctx, item.Id)
+		keeper.RemoveDistribution(ctx, item.Id)
+		_, found := keeper.GetDistribution(ctx, item.Id)
 		require.False(t, found)
 	}
 }
 
-func TestMinterGetAll(t *testing.T) {
+func TestDistributionGetAll(t *testing.T) {
 	keeper, ctx := keepertest.TreasuryKeeper(t)
-	items := createNMinter(keeper, ctx, 10)
+	items := createNDistribution(keeper, ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
-		nullify.Fill(keeper.GetAllMinter(ctx)),
+		nullify.Fill(keeper.GetAllDistribution(ctx)),
 	)
 }
 
-func TestMinterCount(t *testing.T) {
+func TestDistributionCount(t *testing.T) {
 	keeper, ctx := keepertest.TreasuryKeeper(t)
-	items := createNMinter(keeper, ctx, 10)
+	items := createNDistribution(keeper, ctx, 10)
 	count := uint64(len(items))
-	require.Equal(t, count, keeper.GetMinterCount(ctx))
+	require.Equal(t, count, keeper.GetDistributionCount(ctx))
 }

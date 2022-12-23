@@ -15,29 +15,29 @@ import (
 	keepertest "github.com/platine-network/platine/testutil/keeper"
 )
 
-func TestMinterQuerySingle(t *testing.T) {
+func TestDistributionQuerySingle(t *testing.T) {
 	keeper, ctx := keepertest.TreasuryKeeper(t)
 	wctx := sdk.WrapSDKContext(ctx)
-	msgs := createNMinter(keeper, ctx, 2)
+	msgs := createNDistribution(keeper, ctx, 2)
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryGetMinterRequest
-		response *types.QueryGetMinterResponse
+		request  *types.QueryGetDistributionRequest
+		response *types.QueryGetDistributionResponse
 		err      error
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetMinterRequest{Id: msgs[0].Id},
-			response: &types.QueryGetMinterResponse{Minter: msgs[0]},
+			request:  &types.QueryGetDistributionRequest{Id: msgs[0].Id},
+			response: &types.QueryGetDistributionResponse{Distribution: msgs[0]},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetMinterRequest{Id: msgs[1].Id},
-			response: &types.QueryGetMinterResponse{Minter: msgs[1]},
+			request:  &types.QueryGetDistributionRequest{Id: msgs[1].Id},
+			response: &types.QueryGetDistributionResponse{Distribution: msgs[1]},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetMinterRequest{Id: uint64(len(msgs))},
+			request: &types.QueryGetDistributionRequest{Id: uint64(len(msgs))},
 			err:     sdkerrors.ErrKeyNotFound,
 		},
 		{
@@ -46,7 +46,7 @@ func TestMinterQuerySingle(t *testing.T) {
 		},
 	} {
 		t.Run(tc.desc, func(t *testing.T) {
-			response, err := keeper.Minter(wctx, tc.request)
+			response, err := keeper.Distribution(wctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {
@@ -60,13 +60,13 @@ func TestMinterQuerySingle(t *testing.T) {
 	}
 }
 
-func TestMinterQueryPaginated(t *testing.T) {
+func TestDistributionQueryPaginated(t *testing.T) {
 	keeper, ctx := keepertest.TreasuryKeeper(t)
 	wctx := sdk.WrapSDKContext(ctx)
-	msgs := createNMinter(keeper, ctx, 5)
+	msgs := createNDistribution(keeper, ctx, 5)
 
-	request := func(next []byte, offset, limit uint64, total bool) *types.QueryAllMinterRequest {
-		return &types.QueryAllMinterRequest{
+	request := func(next []byte, offset, limit uint64, total bool) *types.QueryAllDistributionRequest {
+		return &types.QueryAllDistributionRequest{
 			Pagination: &query.PageRequest{
 				Key:        next,
 				Offset:     offset,
@@ -78,12 +78,12 @@ func TestMinterQueryPaginated(t *testing.T) {
 	t.Run("ByOffset", func(t *testing.T) {
 		step := 2
 		for i := 0; i < len(msgs); i += step {
-			resp, err := keeper.MinterAll(wctx, request(nil, uint64(i), uint64(step), false))
+			resp, err := keeper.DistributionAll(wctx, request(nil, uint64(i), uint64(step), false))
 			require.NoError(t, err)
-			require.LessOrEqual(t, len(resp.Minter), step)
+			require.LessOrEqual(t, len(resp.Distribution), step)
 			require.Subset(t,
 				nullify.Fill(msgs),
-            	nullify.Fill(resp.Minter),
+            	nullify.Fill(resp.Distribution),
             )
 		}
 	})
@@ -91,27 +91,27 @@ func TestMinterQueryPaginated(t *testing.T) {
 		step := 2
 		var next []byte
 		for i := 0; i < len(msgs); i += step {
-			resp, err := keeper.MinterAll(wctx, request(next, 0, uint64(step), false))
+			resp, err := keeper.DistributionAll(wctx, request(next, 0, uint64(step), false))
 			require.NoError(t, err)
-			require.LessOrEqual(t, len(resp.Minter), step)
+			require.LessOrEqual(t, len(resp.Distribution), step)
 			require.Subset(t,
 				nullify.Fill(msgs),
-            	nullify.Fill(resp.Minter),
+            	nullify.Fill(resp.Distribution),
             )
 			next = resp.Pagination.NextKey
 		}
 	})
 	t.Run("Total", func(t *testing.T) {
-		resp, err := keeper.MinterAll(wctx, request(nil, 0, 0, true))
+		resp, err := keeper.DistributionAll(wctx, request(nil, 0, 0, true))
 		require.NoError(t, err)
 		require.Equal(t, len(msgs), int(resp.Pagination.Total))
 		require.ElementsMatch(t,
 			nullify.Fill(msgs),
-			nullify.Fill(resp.Minter),
+			nullify.Fill(resp.Distribution),
 		)
 	})
 	t.Run("InvalidRequest", func(t *testing.T) {
-		_, err := keeper.MinterAll(wctx, nil)
+		_, err := keeper.DistributionAll(wctx, nil)
 		require.ErrorIs(t, err, status.Error(codes.InvalidArgument, "invalid request"))
 	})
 }
