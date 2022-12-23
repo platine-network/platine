@@ -36,7 +36,7 @@ func (h MultiEpochHooks) BeforeEpochStart(ctx sdk.context, identifier string, ep
 
 func panicCatchingEpochHook(
 	ctx sdk.context, 
-	hookFn func(ctx sdk.context, identifier string epochNumber int64) error,
+	hookFn func(ctx sdk.context, identifier string, epochNumber int64) error,
 	identifier string,
 	epochNumber int64,
 ) {

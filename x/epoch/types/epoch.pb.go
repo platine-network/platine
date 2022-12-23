@@ -5,16 +5,22 @@ package types
 
 import (
 	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
+	github_com_gogo_protobuf_types "github.com/gogo/protobuf/types"
+	_ "google.golang.org/protobuf/types/known/durationpb"
+	_ "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	math "math"
 	math_bits "math/bits"
+	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -23,14 +29,46 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type Epoch struct {
-	Id                      uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	StartTime               string `protobuf:"bytes,2,opt,name=startTime,proto3" json:"startTime,omitempty"`
-	Duration                string `protobuf:"bytes,3,opt,name=duration,proto3" json:"duration,omitempty"`
-	CurrentEpoch            uint64 `protobuf:"varint,4,opt,name=currentEpoch,proto3" json:"currentEpoch,omitempty"`
-	CurrentEpochStartTime   string `protobuf:"bytes,5,opt,name=currentEpochStartTime,proto3" json:"currentEpochStartTime,omitempty"`
-	EpochCountingStarted    bool   `protobuf:"varint,6,opt,name=epochCountingStarted,proto3" json:"epochCountingStarted,omitempty"`
-	Reserved                string `protobuf:"bytes,7,opt,name=reserved,proto3" json:"reserved,omitempty"`
-	CurrentEpochStartHeight uint64 `protobuf:"varint,8,opt,name=currentEpochStartHeight,proto3" json:"currentEpochStartHeight,omitempty"`
+	// identifier is a unique reference to this particular timer.
+	Identifier string `protobuf:"bytes,1,opt,name=identifier,proto3" json:"identifier,omitempty"`
+	// start time is the time at which the timer first ever ticks.
+	// If start time is in the future, the epoch will not begin until the start
+	// time.
+	StartTime time.Time `protobuf:"bytes,2,opt,name=startTime,proto3,stdtime" json:"start_time,omitempty" yaml:"start_time"`
+	// duration is the time in between epoch ticks.
+	// In order for intended behavior to be met, duration should
+	// be greater than the chains expected block time.
+	// Duration must be non-zero.
+	Duration time.Duration `protobuf:"bytes,3,opt,name=duration,proto3,stdduration" json:"duration,omitempty" yaml:"duration"`
+	// current epoch is the current epoch number, or in other words,
+	// how many times has the timer 'ticked'.
+	// The first tick (currentEpoch=1) is defined as
+	// the first block whose blocktime is greater than the Epoch startTime.
+	CurrentEpoch int64 `protobuf:"varint,4,opt,name=currentEpoch,proto3" json:"current_epoch,omitempty" yaml:"current_epoch"`
+	// current epoch start time describes the start time of the current timer
+	// interval. The interval is (currentEpochStartTime,
+	// ccurrentEpochStartTime + duration] When the timer ticks, this is set to
+	// currentEpochStartTime = lastEpochStartTime + duration only one timer
+	// tick for a given identifier can occur per block.
+	//
+	// NOTE! The currentEpochStartTime may diverge significantly from the
+	// wall-clock time the epoch began at. Wall-clock time of epoch start may be
+	// >> currentEpochStartTime. Suppose currentEpochStartTime = 10,
+	// duration = 5. Suppose the chain goes offline at t=14, and comes back online
+	// at t=30, and produces blocks at every successive time. (t=31, 32, etc.)
+	// * The t=30 block will start the epoch for (10, 15]
+	// * The t=31 block will start the epoch for (15, 20]
+	// * The t=32 block will start the epoch for (20, 25]
+	// * The t=33 block will start the epoch for (25, 30]
+	// * The t=34 block will start the epoch for (30, 35]
+	// * The **t=36** block will start the epoch for (35, 40]
+	CurrentEpochStartTime time.Time `protobuf:"bytes,5,opt,name=currentEpochStartTime,proto3,stdtime" json:"current_epoch_start_time,omitempty" yaml:"current_epoch_start_time"`
+	// epoch_counting_started is a boolean, that indicates whether this
+	// epoch timer has began yet.
+	EpochCountingStarted bool `protobuf:"varint,6,opt,name=epochCountingStarted,proto3" json:"epoch_counting_started,omitempty" yaml:"epoch_counting_started"`
+	// current epoch start height is the block height at which the current epoch
+	// started. (The block height at which the timer last ticked)
+	CurrentEpochStartHeight int64 `protobuf:"varint,7,opt,name=currentEpochStartHeight,proto3" json:"current_epoch_start_height,omitempty" yaml:"current_epoch_start_height"`
 }
 
 func (m *Epoch) Reset()         { *m = Epoch{} }
@@ -66,39 +104,39 @@ func (m *Epoch) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Epoch proto.InternalMessageInfo
 
-func (m *Epoch) GetId() uint64 {
+func (m *Epoch) GetIdentifier() string {
 	if m != nil {
-		return m.Id
+		return m.Identifier
+	}
+	return ""
+}
+
+func (m *Epoch) GetStartTime() time.Time {
+	if m != nil {
+		return m.StartTime
+	}
+	return time.Time{}
+}
+
+func (m *Epoch) GetDuration() time.Duration {
+	if m != nil {
+		return m.Duration
 	}
 	return 0
 }
 
-func (m *Epoch) GetStartTime() string {
-	if m != nil {
-		return m.StartTime
-	}
-	return ""
-}
-
-func (m *Epoch) GetDuration() string {
-	if m != nil {
-		return m.Duration
-	}
-	return ""
-}
-
-func (m *Epoch) GetCurrentEpoch() uint64 {
+func (m *Epoch) GetCurrentEpoch() int64 {
 	if m != nil {
 		return m.CurrentEpoch
 	}
 	return 0
 }
 
-func (m *Epoch) GetCurrentEpochStartTime() string {
+func (m *Epoch) GetCurrentEpochStartTime() time.Time {
 	if m != nil {
 		return m.CurrentEpochStartTime
 	}
-	return ""
+	return time.Time{}
 }
 
 func (m *Epoch) GetEpochCountingStarted() bool {
@@ -108,14 +146,7 @@ func (m *Epoch) GetEpochCountingStarted() bool {
 	return false
 }
 
-func (m *Epoch) GetReserved() string {
-	if m != nil {
-		return m.Reserved
-	}
-	return ""
-}
-
-func (m *Epoch) GetCurrentEpochStartHeight() uint64 {
+func (m *Epoch) GetCurrentEpochStartHeight() int64 {
 	if m != nil {
 		return m.CurrentEpochStartHeight
 	}
@@ -129,25 +160,37 @@ func init() {
 func init() { proto.RegisterFile("platine/epoch/epoch.proto", fileDescriptor_93451784b9615324) }
 
 var fileDescriptor_93451784b9615324 = []byte{
-	// 285 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x2c, 0xc8, 0x49, 0x2c,
-	0xc9, 0xcc, 0x4b, 0xd5, 0x4f, 0x2d, 0xc8, 0x4f, 0xce, 0x80, 0x90, 0x7a, 0x05, 0x45, 0xf9, 0x25,
-	0xf9, 0x42, 0x32, 0x50, 0xa9, 0xbc, 0xd4, 0x92, 0xf2, 0xfc, 0xa2, 0x6c, 0x3d, 0x28, 0x57, 0x0f,
-	0xac, 0x46, 0x69, 0x2b, 0x13, 0x17, 0xab, 0x2b, 0x88, 0x25, 0xc4, 0xc7, 0xc5, 0x94, 0x99, 0x22,
-	0xc1, 0xa8, 0xc0, 0xa8, 0xc1, 0x12, 0xc4, 0x94, 0x99, 0x22, 0x24, 0xc3, 0xc5, 0x59, 0x5c, 0x92,
-	0x58, 0x54, 0x12, 0x92, 0x99, 0x9b, 0x2a, 0xc1, 0xa4, 0xc0, 0xa8, 0xc1, 0x19, 0x84, 0x10, 0x10,
-	0x92, 0xe2, 0xe2, 0x48, 0x29, 0x2d, 0x4a, 0x2c, 0xc9, 0xcc, 0xcf, 0x93, 0x60, 0x06, 0x4b, 0xc2,
-	0xf9, 0x42, 0x4a, 0x5c, 0x3c, 0xc9, 0xa5, 0x45, 0x45, 0xa9, 0x79, 0x25, 0x60, 0x93, 0x25, 0x58,
-	0xc0, 0x66, 0xa2, 0x88, 0x09, 0x99, 0x70, 0x89, 0x22, 0xf3, 0x83, 0xe1, 0x36, 0xb1, 0x82, 0x0d,
-	0xc3, 0x2e, 0x29, 0x64, 0xc4, 0x25, 0x02, 0x76, 0xb6, 0x73, 0x7e, 0x69, 0x5e, 0x49, 0x66, 0x5e,
-	0x3a, 0x58, 0x26, 0x35, 0x45, 0x82, 0x4d, 0x81, 0x51, 0x83, 0x23, 0x08, 0xab, 0x1c, 0xc8, 0xa5,
-	0x45, 0xa9, 0xc5, 0xa9, 0x45, 0x65, 0xa9, 0x29, 0x12, 0xec, 0x10, 0x97, 0xc2, 0xf8, 0x42, 0x16,
-	0x5c, 0xe2, 0x18, 0x16, 0x79, 0xa4, 0x66, 0xa6, 0x67, 0x94, 0x48, 0x70, 0x80, 0x1d, 0x8d, 0x4b,
-	0xda, 0xc9, 0xeb, 0xc4, 0x23, 0x39, 0xc6, 0x0b, 0x8f, 0xe4, 0x18, 0x1f, 0x3c, 0x92, 0x63, 0x9c,
-	0xf0, 0x58, 0x8e, 0xe1, 0xc2, 0x63, 0x39, 0x86, 0x1b, 0x8f, 0xe5, 0x18, 0xa2, 0x0c, 0xd2, 0x33,
-	0x4b, 0x32, 0x4a, 0x93, 0xf4, 0x92, 0xf3, 0x73, 0xf5, 0xa1, 0x61, 0xad, 0x0b, 0x0d, 0x7b, 0x18,
-	0x5f, 0xbf, 0x02, 0x1a, 0x4f, 0x25, 0x95, 0x05, 0xa9, 0xc5, 0x49, 0x6c, 0xe0, 0x88, 0x32, 0x06,
-	0x04, 0x00, 0x00, 0xff, 0xff, 0xc7, 0x09, 0xff, 0x37, 0xc5, 0x01, 0x00, 0x00,
+	// 479 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x93, 0x41, 0x6f, 0xd3, 0x30,
+	0x14, 0xc7, 0x6b, 0xc6, 0xca, 0x66, 0x90, 0x10, 0x56, 0xd1, 0xb2, 0x0a, 0xec, 0x10, 0x71, 0xe8,
+	0x01, 0x12, 0x60, 0xe2, 0xc2, 0x31, 0x30, 0x09, 0x21, 0x71, 0x20, 0x4c, 0x42, 0xe2, 0x52, 0xa5,
+	0xad, 0x97, 0x58, 0x34, 0x71, 0x94, 0xbe, 0x08, 0xfa, 0x05, 0xe0, 0xba, 0x23, 0x77, 0xbe, 0xcc,
+	0x8e, 0x3b, 0x72, 0x0a, 0xa8, 0xbd, 0xf5, 0xc8, 0x27, 0x40, 0xb1, 0x9d, 0x6d, 0x59, 0x53, 0xed,
+	0x12, 0xc5, 0x7e, 0x7f, 0xff, 0x7f, 0xcf, 0x7f, 0xeb, 0xe1, 0xfd, 0x6c, 0x1a, 0x82, 0x48, 0xb9,
+	0xc7, 0x33, 0x39, 0x8e, 0xf5, 0xd7, 0xcd, 0x72, 0x09, 0x92, 0x3c, 0x30, 0xa5, 0x94, 0xc3, 0x57,
+	0x99, 0x7f, 0x71, 0xcd, 0xd2, 0x55, 0x9a, 0x7e, 0x2f, 0x92, 0x91, 0x54, 0x42, 0xaf, 0xfa, 0xd3,
+	0x67, 0xfa, 0x34, 0x92, 0x32, 0x9a, 0x72, 0x4f, 0xad, 0x46, 0xc5, 0xb1, 0x37, 0x29, 0xf2, 0x10,
+	0x84, 0x4c, 0x4d, 0x9d, 0x5d, 0xad, 0x83, 0x48, 0xf8, 0x0c, 0xc2, 0x24, 0xd3, 0x02, 0xe7, 0x7b,
+	0x17, 0x6f, 0x1f, 0x56, 0x00, 0x42, 0x31, 0x16, 0x13, 0x9e, 0x82, 0x38, 0x16, 0x3c, 0xb7, 0x90,
+	0x8d, 0x06, 0xbb, 0xc1, 0xa5, 0x1d, 0x22, 0xf1, 0xee, 0x0c, 0xc2, 0x1c, 0x8e, 0x44, 0xc2, 0xad,
+	0x1b, 0x36, 0x1a, 0xdc, 0x7e, 0xd1, 0x77, 0xb5, 0xbd, 0x5b, 0xdb, 0xbb, 0x47, 0xb5, 0xbd, 0xff,
+	0xf2, 0xb4, 0x64, 0x9d, 0x55, 0xc9, 0x7a, 0xea, 0xd0, 0xb0, 0xe2, 0x3e, 0x91, 0x89, 0x00, 0x9e,
+	0x64, 0x30, 0xff, 0x57, 0xb2, 0x7b, 0xf3, 0x30, 0x99, 0xbe, 0x72, 0x2e, 0xaa, 0xce, 0xc9, 0x1f,
+	0x86, 0x82, 0x0b, 0x06, 0x89, 0xf1, 0x4e, 0x7d, 0x1b, 0x6b, 0x4b, 0xf1, 0xf6, 0xd7, 0x78, 0x6f,
+	0x8c, 0xc0, 0x7f, 0x6e, 0x70, 0xa4, 0x3e, 0xd2, 0x80, 0xdd, 0xd5, 0xb0, 0xba, 0xe6, 0xfc, 0xac,
+	0x50, 0xe7, 0xee, 0xe4, 0x13, 0xbe, 0x33, 0x2e, 0xf2, 0x9c, 0xa7, 0xa0, 0xa2, 0xb0, 0x6e, 0xda,
+	0x68, 0xb0, 0xe5, 0x1f, 0xac, 0x4a, 0xb6, 0x67, 0xf6, 0x87, 0xea, 0x11, 0x1a, 0x9e, 0x3d, 0xed,
+	0xd9, 0x10, 0x38, 0x41, 0xc3, 0x88, 0xfc, 0x42, 0xf8, 0xfe, 0xe5, 0x8d, 0x8f, 0xe7, 0x01, 0x6e,
+	0x5f, 0x1b, 0xe0, 0x07, 0x73, 0xa3, 0x26, 0x61, 0xb8, 0x21, 0x4e, 0xd6, 0xd2, 0xcd, 0xf0, 0x6a,
+	0xb8, 0xed, 0xbd, 0x90, 0x39, 0xee, 0x29, 0xfd, 0x6b, 0x59, 0xa4, 0x20, 0xd2, 0x48, 0x55, 0xf8,
+	0xc4, 0xea, 0xda, 0x68, 0xb0, 0xe3, 0x1f, 0xae, 0x4a, 0x66, 0x6b, 0xbf, 0xb1, 0x11, 0x68, 0x63,
+	0x3e, 0x69, 0x74, 0xf0, 0x50, 0x77, 0xd0, 0xae, 0x74, 0x82, 0x56, 0x04, 0xf9, 0x81, 0xf0, 0xde,
+	0x5a, 0x53, 0x6f, 0xb9, 0x88, 0x62, 0xb0, 0x6e, 0xa9, 0x57, 0x78, 0xbf, 0x2a, 0xd9, 0xe3, 0xb6,
+	0x6b, 0xc5, 0x4a, 0xd5, 0x68, 0xe1, 0xd1, 0xe6, 0x10, 0xb4, 0xda, 0x09, 0x36, 0xd1, 0xfc, 0x77,
+	0xa7, 0x0b, 0x8a, 0xce, 0x16, 0x14, 0xfd, 0x5d, 0x50, 0x74, 0xb2, 0xa4, 0x9d, 0xb3, 0x25, 0xed,
+	0xfc, 0x5e, 0xd2, 0xce, 0xe7, 0x67, 0x91, 0x80, 0xb8, 0x18, 0xb9, 0x63, 0x99, 0x78, 0x66, 0x26,
+	0x9f, 0x9a, 0x19, 0xad, 0xd7, 0xde, 0x37, 0x33, 0xcf, 0x30, 0xcf, 0xf8, 0x6c, 0xd4, 0x55, 0xcf,
+	0x79, 0xf0, 0x3f, 0x00, 0x00, 0xff, 0xff, 0x86, 0x72, 0x1e, 0x6c, 0xed, 0x03, 0x00, 0x00,
 }
 
 func (m *Epoch) Marshal() (dAtA []byte, err error) {
@@ -173,14 +216,7 @@ func (m *Epoch) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.CurrentEpochStartHeight != 0 {
 		i = encodeVarintEpoch(dAtA, i, uint64(m.CurrentEpochStartHeight))
 		i--
-		dAtA[i] = 0x40
-	}
-	if len(m.Reserved) > 0 {
-		i -= len(m.Reserved)
-		copy(dAtA[i:], m.Reserved)
-		i = encodeVarintEpoch(dAtA, i, uint64(len(m.Reserved)))
-		i--
-		dAtA[i] = 0x3a
+		dAtA[i] = 0x38
 	}
 	if m.EpochCountingStarted {
 		i--
@@ -192,36 +228,41 @@ func (m *Epoch) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x30
 	}
-	if len(m.CurrentEpochStartTime) > 0 {
-		i -= len(m.CurrentEpochStartTime)
-		copy(dAtA[i:], m.CurrentEpochStartTime)
-		i = encodeVarintEpoch(dAtA, i, uint64(len(m.CurrentEpochStartTime)))
-		i--
-		dAtA[i] = 0x2a
+	n1, err1 := github_com_gogo_protobuf_types.StdTimeMarshalTo(m.CurrentEpochStartTime, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(m.CurrentEpochStartTime):])
+	if err1 != nil {
+		return 0, err1
 	}
+	i -= n1
+	i = encodeVarintEpoch(dAtA, i, uint64(n1))
+	i--
+	dAtA[i] = 0x2a
 	if m.CurrentEpoch != 0 {
 		i = encodeVarintEpoch(dAtA, i, uint64(m.CurrentEpoch))
 		i--
 		dAtA[i] = 0x20
 	}
-	if len(m.Duration) > 0 {
-		i -= len(m.Duration)
-		copy(dAtA[i:], m.Duration)
-		i = encodeVarintEpoch(dAtA, i, uint64(len(m.Duration)))
-		i--
-		dAtA[i] = 0x1a
+	n2, err2 := github_com_gogo_protobuf_types.StdDurationMarshalTo(m.Duration, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdDuration(m.Duration):])
+	if err2 != nil {
+		return 0, err2
 	}
-	if len(m.StartTime) > 0 {
-		i -= len(m.StartTime)
-		copy(dAtA[i:], m.StartTime)
-		i = encodeVarintEpoch(dAtA, i, uint64(len(m.StartTime)))
-		i--
-		dAtA[i] = 0x12
+	i -= n2
+	i = encodeVarintEpoch(dAtA, i, uint64(n2))
+	i--
+	dAtA[i] = 0x1a
+	n3, err3 := github_com_gogo_protobuf_types.StdTimeMarshalTo(m.StartTime, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(m.StartTime):])
+	if err3 != nil {
+		return 0, err3
 	}
-	if m.Id != 0 {
-		i = encodeVarintEpoch(dAtA, i, uint64(m.Id))
+	i -= n3
+	i = encodeVarintEpoch(dAtA, i, uint64(n3))
+	i--
+	dAtA[i] = 0x12
+	if len(m.Identifier) > 0 {
+		i -= len(m.Identifier)
+		copy(dAtA[i:], m.Identifier)
+		i = encodeVarintEpoch(dAtA, i, uint64(len(m.Identifier)))
 		i--
-		dAtA[i] = 0x8
+		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -243,30 +284,21 @@ func (m *Epoch) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Id != 0 {
-		n += 1 + sovEpoch(uint64(m.Id))
-	}
-	l = len(m.StartTime)
+	l = len(m.Identifier)
 	if l > 0 {
 		n += 1 + l + sovEpoch(uint64(l))
 	}
-	l = len(m.Duration)
-	if l > 0 {
-		n += 1 + l + sovEpoch(uint64(l))
-	}
+	l = github_com_gogo_protobuf_types.SizeOfStdTime(m.StartTime)
+	n += 1 + l + sovEpoch(uint64(l))
+	l = github_com_gogo_protobuf_types.SizeOfStdDuration(m.Duration)
+	n += 1 + l + sovEpoch(uint64(l))
 	if m.CurrentEpoch != 0 {
 		n += 1 + sovEpoch(uint64(m.CurrentEpoch))
 	}
-	l = len(m.CurrentEpochStartTime)
-	if l > 0 {
-		n += 1 + l + sovEpoch(uint64(l))
-	}
+	l = github_com_gogo_protobuf_types.SizeOfStdTime(m.CurrentEpochStartTime)
+	n += 1 + l + sovEpoch(uint64(l))
 	if m.EpochCountingStarted {
 		n += 2
-	}
-	l = len(m.Reserved)
-	if l > 0 {
-		n += 1 + l + sovEpoch(uint64(l))
 	}
 	if m.CurrentEpochStartHeight != 0 {
 		n += 1 + sovEpoch(uint64(m.CurrentEpochStartHeight))
@@ -310,27 +342,8 @@ func (m *Epoch) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
-			}
-			m.Id = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEpoch
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Id |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StartTime", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Identifier", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -358,13 +371,46 @@ func (m *Epoch) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.StartTime = string(dAtA[iNdEx:postIndex])
+			m.Identifier = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StartTime", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEpoch
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthEpoch
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthEpoch
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := github_com_gogo_protobuf_types.StdTimeUnmarshal(&m.StartTime, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Duration", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowEpoch
@@ -374,23 +420,24 @@ func (m *Epoch) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthEpoch
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthEpoch
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Duration = string(dAtA[iNdEx:postIndex])
+			if err := github_com_gogo_protobuf_types.StdDurationUnmarshal(&m.Duration, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		case 4:
 			if wireType != 0 {
@@ -406,7 +453,7 @@ func (m *Epoch) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.CurrentEpoch |= uint64(b&0x7F) << shift
+				m.CurrentEpoch |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -415,7 +462,7 @@ func (m *Epoch) Unmarshal(dAtA []byte) error {
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CurrentEpochStartTime", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowEpoch
@@ -425,23 +472,24 @@ func (m *Epoch) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthEpoch
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthEpoch
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.CurrentEpochStartTime = string(dAtA[iNdEx:postIndex])
+			if err := github_com_gogo_protobuf_types.StdTimeUnmarshal(&m.CurrentEpochStartTime, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		case 6:
 			if wireType != 0 {
@@ -464,38 +512,6 @@ func (m *Epoch) Unmarshal(dAtA []byte) error {
 			}
 			m.EpochCountingStarted = bool(v != 0)
 		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Reserved", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEpoch
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthEpoch
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthEpoch
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Reserved = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 8:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CurrentEpochStartHeight", wireType)
 			}
@@ -509,7 +525,7 @@ func (m *Epoch) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.CurrentEpochStartHeight |= uint64(b&0x7F) << shift
+				m.CurrentEpochStartHeight |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}

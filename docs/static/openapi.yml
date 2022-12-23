@@ -44682,7 +44682,45 @@ paths:
           format: uint64
       tags:
         - Query
-  /platine-network/platine/epoch/epoch:
+  /platine/epoch/current_epoch:
+    get:
+      summary: Queries current Epoch.
+      operationId: PlatinenetworkPlatineEpochCurrentEpoch
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              current_epoch:
+                type: string
+                format: int64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: identifier
+          in: query
+          required: false
+          type: string
+      tags:
+        - Query
+  /platine/epoch/epochs:
     get:
       summary: Queries a list of Epoch items.
       operationId: PlatinenetworkPlatineEpochEpochAll
@@ -44692,58 +44730,111 @@ paths:
           schema:
             type: object
             properties:
-              Epoch:
+              Epochs:
                 type: array
                 items:
                   type: object
                   properties:
-                    id:
+                    identifier:
                       type: string
-                      format: uint64
+                      description: >-
+                        identifier is a unique reference to this particular
+                        timer.
                     startTime:
                       type: string
+                      format: date-time
+                      description: >-
+                        start time is the time at which the timer first ever
+                        ticks.
+
+                        If start time is in the future, the epoch will not begin
+                        until the start
+
+                        time.
                     duration:
                       type: string
+                      description: >-
+                        duration is the time in between epoch ticks.
+
+                        In order for intended behavior to be met, duration
+                        should
+
+                        be greater than the chains expected block time.
+
+                        Duration must be non-zero.
                     currentEpoch:
                       type: string
-                      format: uint64
+                      format: int64
+                      description: >-
+                        current epoch is the current epoch number, or in other
+                        words,
+
+                        how many times has the timer 'ticked'.
+
+                        The first tick (currentEpoch=1) is defined as
+
+                        the first block whose blocktime is greater than the
+                        Epoch startTime.
                     currentEpochStartTime:
                       type: string
+                      format: date-time
+                      description: >-
+                        current epoch start time describes the start time of the
+                        current timer
+
+                        interval. The interval is (currentEpochStartTime,
+
+                        ccurrentEpochStartTime + duration] When the timer ticks,
+                        this is set to
+
+                        currentEpochStartTime = lastEpochStartTime + duration
+                        only one timer
+
+                        tick for a given identifier can occur per block.
+
+
+                        NOTE! The currentEpochStartTime may diverge
+                        significantly from the
+
+                        wall-clock time the epoch began at. Wall-clock time of
+                        epoch start may be
+
+                        >> currentEpochStartTime. Suppose currentEpochStartTime
+                        = 10,
+
+                        duration = 5. Suppose the chain goes offline at t=14,
+                        and comes back online
+
+                        at t=30, and produces blocks at every successive time.
+                        (t=31, 32, etc.)
+
+                        * The t=30 block will start the epoch for (10, 15]
+
+                        * The t=31 block will start the epoch for (15, 20]
+
+                        * The t=32 block will start the epoch for (20, 25]
+
+                        * The t=33 block will start the epoch for (25, 30]
+
+                        * The t=34 block will start the epoch for (30, 35]
+
+                        * The **t=36** block will start the epoch for (35, 40]
                     epochCountingStarted:
                       type: boolean
-                    reserved:
-                      type: string
+                      description: >-
+                        epoch_counting_started is a boolean, that indicates
+                        whether this
+
+                        epoch timer has began yet.
                     currentEpochStartHeight:
                       type: string
-                      format: uint64
-              pagination:
-                type: object
-                properties:
-                  next_key:
-                    type: string
-                    format: byte
-                    description: |-
-                      next_key is the key to be passed to PageRequest.key to
-                      query the next page most efficiently. It will be empty if
-                      there are no more results.
-                  total:
-                    type: string
-                    format: uint64
-                    title: >-
-                      total is total number of results available if
-                      PageRequest.count_total
+                      format: int64
+                      title: >-
+                        current epoch start height is the block height at which
+                        the current epoch
 
-                      was set, its value is undefined otherwise
-                description: >-
-                  PageResponse is to be embedded in gRPC response messages where
-                  the
-
-                  corresponding request message has used PageRequest.
-
-                   message SomeResponse {
-                           repeated Bar results = 1;
-                           PageResponse page = 2;
-                   }
+                        started. (The block height at which the timer last
+                        ticked)
         default:
           description: An unexpected error response.
           schema:
@@ -44762,121 +44853,6 @@ paths:
                     '@type':
                       type: string
                   additionalProperties: {}
-      parameters:
-        - name: pagination.key
-          description: |-
-            key is a value returned in PageResponse.next_key to begin
-            querying the next page most efficiently. Only one of offset or key
-            should be set.
-          in: query
-          required: false
-          type: string
-          format: byte
-        - name: pagination.offset
-          description: >-
-            offset is a numeric offset that can be used when key is unavailable.
-
-            It is less efficient than using key. Only one of offset or key
-            should
-
-            be set.
-          in: query
-          required: false
-          type: string
-          format: uint64
-        - name: pagination.limit
-          description: >-
-            limit is the total number of results to be returned in the result
-            page.
-
-            If left empty it will default to a value to be set by each app.
-          in: query
-          required: false
-          type: string
-          format: uint64
-        - name: pagination.count_total
-          description: >-
-            count_total is set to true  to indicate that the result set should
-            include
-
-            a count of the total number of items available for pagination in
-            UIs.
-
-            count_total is only respected when offset is used. It is ignored
-            when key
-
-            is set.
-          in: query
-          required: false
-          type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
-
-
-            Since: cosmos-sdk 0.43
-          in: query
-          required: false
-          type: boolean
-      tags:
-        - Query
-  /platine-network/platine/epoch/epoch/{id}:
-    get:
-      summary: Queries a Epoch by id.
-      operationId: PlatinenetworkPlatineEpochEpoch
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              Epoch:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    format: uint64
-                  startTime:
-                    type: string
-                  duration:
-                    type: string
-                  currentEpoch:
-                    type: string
-                    format: uint64
-                  currentEpochStartTime:
-                    type: string
-                  epochCountingStarted:
-                    type: boolean
-                  reserved:
-                    type: string
-                  currentEpochStartHeight:
-                    type: string
-                    format: uint64
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          format: uint64
       tags:
         - Query
   /platine/token:
@@ -45122,6 +45098,209 @@ paths:
           in: path
           required: true
           type: string
+      tags:
+        - Query
+  /platine-network/platine/treasury/minter:
+    get:
+      summary: Queries a list of Minter items.
+      operationId: PlatinenetworkPlatineTreasuryMinterAll
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Minter:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    provision:
+                      type: string
+                      description: provision represent rewards for the current epoch.
+                  description: Minter represents the minting state.
+              pagination:
+                type: object
+                properties:
+                  next_key:
+                    type: string
+                    format: byte
+                    description: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently. It will be empty if
+                      there are no more results.
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.count_total
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  /platine-network/platine/treasury/minter/{id}:
+    get:
+      summary: Queries a Minter by id.
+      operationId: PlatinenetworkPlatineTreasuryMinter
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Minter:
+                type: object
+                properties:
+                  provision:
+                    type: string
+                    description: provision represent rewards for the current epoch.
+                description: Minter represents the minting state.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          format: uint64
+      tags:
+        - Query
+  /platine/treasury/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: PlatinenetworkPlatineTreasuryParams
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              params:
+                description: params holds all the parameters of this module.
+                type: object
+            description: >-
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
       tags:
         - Query
 definitions:
@@ -74680,103 +74859,189 @@ definitions:
   platinenetwork.platine.epoch.Epoch:
     type: object
     properties:
-      id:
+      identifier:
         type: string
-        format: uint64
+        description: identifier is a unique reference to this particular timer.
       startTime:
         type: string
+        format: date-time
+        description: >-
+          start time is the time at which the timer first ever ticks.
+
+          If start time is in the future, the epoch will not begin until the
+          start
+
+          time.
       duration:
         type: string
+        description: |-
+          duration is the time in between epoch ticks.
+          In order for intended behavior to be met, duration should
+          be greater than the chains expected block time.
+          Duration must be non-zero.
       currentEpoch:
         type: string
-        format: uint64
+        format: int64
+        description: |-
+          current epoch is the current epoch number, or in other words,
+          how many times has the timer 'ticked'.
+          The first tick (currentEpoch=1) is defined as
+          the first block whose blocktime is greater than the Epoch startTime.
       currentEpochStartTime:
         type: string
+        format: date-time
+        description: >-
+          current epoch start time describes the start time of the current timer
+
+          interval. The interval is (currentEpochStartTime,
+
+          ccurrentEpochStartTime + duration] When the timer ticks, this is set
+          to
+
+          currentEpochStartTime = lastEpochStartTime + duration only one timer
+
+          tick for a given identifier can occur per block.
+
+
+          NOTE! The currentEpochStartTime may diverge significantly from the
+
+          wall-clock time the epoch began at. Wall-clock time of epoch start may
+          be
+
+          >> currentEpochStartTime. Suppose currentEpochStartTime = 10,
+
+          duration = 5. Suppose the chain goes offline at t=14, and comes back
+          online
+
+          at t=30, and produces blocks at every successive time. (t=31, 32,
+          etc.)
+
+          * The t=30 block will start the epoch for (10, 15]
+
+          * The t=31 block will start the epoch for (15, 20]
+
+          * The t=32 block will start the epoch for (20, 25]
+
+          * The t=33 block will start the epoch for (25, 30]
+
+          * The t=34 block will start the epoch for (30, 35]
+
+          * The **t=36** block will start the epoch for (35, 40]
       epochCountingStarted:
         type: boolean
-      reserved:
-        type: string
+        description: |-
+          epoch_counting_started is a boolean, that indicates whether this
+          epoch timer has began yet.
       currentEpochStartHeight:
         type: string
-        format: uint64
+        format: int64
+        title: >-
+          current epoch start height is the block height at which the current
+          epoch
+
+          started. (The block height at which the timer last ticked)
   platinenetwork.platine.epoch.QueryAllEpochResponse:
     type: object
     properties:
-      Epoch:
+      Epochs:
         type: array
         items:
           type: object
           properties:
-            id:
+            identifier:
               type: string
-              format: uint64
+              description: identifier is a unique reference to this particular timer.
             startTime:
               type: string
+              format: date-time
+              description: >-
+                start time is the time at which the timer first ever ticks.
+
+                If start time is in the future, the epoch will not begin until
+                the start
+
+                time.
             duration:
               type: string
+              description: |-
+                duration is the time in between epoch ticks.
+                In order for intended behavior to be met, duration should
+                be greater than the chains expected block time.
+                Duration must be non-zero.
             currentEpoch:
               type: string
-              format: uint64
+              format: int64
+              description: >-
+                current epoch is the current epoch number, or in other words,
+
+                how many times has the timer 'ticked'.
+
+                The first tick (currentEpoch=1) is defined as
+
+                the first block whose blocktime is greater than the Epoch
+                startTime.
             currentEpochStartTime:
               type: string
+              format: date-time
+              description: >-
+                current epoch start time describes the start time of the current
+                timer
+
+                interval. The interval is (currentEpochStartTime,
+
+                ccurrentEpochStartTime + duration] When the timer ticks, this is
+                set to
+
+                currentEpochStartTime = lastEpochStartTime + duration only one
+                timer
+
+                tick for a given identifier can occur per block.
+
+
+                NOTE! The currentEpochStartTime may diverge significantly from
+                the
+
+                wall-clock time the epoch began at. Wall-clock time of epoch
+                start may be
+
+                >> currentEpochStartTime. Suppose currentEpochStartTime = 10,
+
+                duration = 5. Suppose the chain goes offline at t=14, and comes
+                back online
+
+                at t=30, and produces blocks at every successive time. (t=31,
+                32, etc.)
+
+                * The t=30 block will start the epoch for (10, 15]
+
+                * The t=31 block will start the epoch for (15, 20]
+
+                * The t=32 block will start the epoch for (20, 25]
+
+                * The t=33 block will start the epoch for (25, 30]
+
+                * The t=34 block will start the epoch for (30, 35]
+
+                * The **t=36** block will start the epoch for (35, 40]
             epochCountingStarted:
               type: boolean
-            reserved:
-              type: string
+              description: |-
+                epoch_counting_started is a boolean, that indicates whether this
+                epoch timer has began yet.
             currentEpochStartHeight:
               type: string
-              format: uint64
-      pagination:
-        type: object
-        properties:
-          next_key:
-            type: string
-            format: byte
-            description: |-
-              next_key is the key to be passed to PageRequest.key to
-              query the next page most efficiently. It will be empty if
-              there are no more results.
-          total:
-            type: string
-            format: uint64
-            title: >-
-              total is total number of results available if
-              PageRequest.count_total
+              format: int64
+              title: >-
+                current epoch start height is the block height at which the
+                current epoch
 
-              was set, its value is undefined otherwise
-        description: |-
-          PageResponse is to be embedded in gRPC response messages where the
-          corresponding request message has used PageRequest.
-
-           message SomeResponse {
-                   repeated Bar results = 1;
-                   PageResponse page = 2;
-           }
-  platinenetwork.platine.epoch.QueryGetEpochResponse:
+                started. (The block height at which the timer last ticked)
+  platinenetwork.platine.epoch.QueryCurrentEpochResponse:
     type: object
     properties:
-      Epoch:
-        type: object
-        properties:
-          id:
-            type: string
-            format: uint64
-          startTime:
-            type: string
-          duration:
-            type: string
-          currentEpoch:
-            type: string
-            format: uint64
-          currentEpochStartTime:
-            type: string
-          epochCountingStarted:
-            type: boolean
-          reserved:
-            type: string
-          currentEpochStartHeight:
-            type: string
-            format: uint64
+      current_epoch:
+        type: string
+        format: int64
   platinenetwork.platine.token.MsgBurnResponse:
     type: object
   platinenetwork.platine.token.MsgCreateTokenResponse:
@@ -74905,3 +75170,68 @@ definitions:
       burnSequence:
         type: string
         format: uint64
+  platinenetwork.platine.treasury.Minter:
+    type: object
+    properties:
+      provision:
+        type: string
+        description: provision represent rewards for the current epoch.
+    description: Minter represents the minting state.
+  platinenetwork.platine.treasury.Params:
+    type: object
+    description: Params defines the parameters for the module.
+  platinenetwork.platine.treasury.QueryAllMinterResponse:
+    type: object
+    properties:
+      Minter:
+        type: array
+        items:
+          type: object
+          properties:
+            provision:
+              type: string
+              description: provision represent rewards for the current epoch.
+          description: Minter represents the minting state.
+      pagination:
+        type: object
+        properties:
+          next_key:
+            type: string
+            format: byte
+            description: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently. It will be empty if
+              there are no more results.
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
+  platinenetwork.platine.treasury.QueryGetMinterResponse:
+    type: object
+    properties:
+      Minter:
+        type: object
+        properties:
+          provision:
+            type: string
+            description: provision represent rewards for the current epoch.
+        description: Minter represents the minting state.
+  platinenetwork.platine.treasury.QueryParamsResponse:
+    type: object
+    properties:
+      params:
+        description: params holds all the parameters of this module.
+        type: object
+    description: QueryParamsResponse is response type for the Query/Params RPC method.

@@ -101,7 +101,7 @@ func (k Keeper) AllEpochs(ctx sdk.Context) []types.Epoch {
 // Calling it any point in block N+1 (assuming the epoch doesn't increment) would return 1.
 func (k Keeper) TotalBlockAfterEpochStart(ctx sdk.Context, identifier string) (int64, error) {
 	epoch := k.GetEpoch(ctx, identifier)
-	if epoch == types.Epoch{} {
+	if (epoch == types.Epoch{}) {
 		return 0, fmt.Errorf("epoch with identifier %s does not exist", identifier)
 	}
 

@@ -16,11 +16,7 @@ type (
 	}
 )
 
-func NewKeeper(
-	cdc codec.BinaryCodec,
-	storeKey,
-) *Keeper {
-
+func NewKeeper(cdc codec.Codec, storeKey sdk.StoreKey) *Keeper {
 	return &Keeper{
 		storeKey: storeKey,
 	}

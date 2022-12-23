@@ -36,9 +36,7 @@ message Epoch {
   // how many times has the timer 'ticked'.
   // The first tick (currentEpoch=1) is defined as
   // the first block whose blocktime is greater than the Epoch startTime.
-  uint64 currentEpoch = 4 [
-    (gogoproto.nullable) = false,
-    (gogoproto.stdduration) = true,
+  int64 currentEpoch = 4 [
     (gogoproto.jsontag) = "current_epoch,omitempty",
     (gogoproto.moretags) = "yaml:\"current_epoch\""
   ]; 
@@ -73,11 +71,10 @@ message Epoch {
     (gogoproto.jsontag) = "epoch_counting_started,omitempty",
     (gogoproto.moretags) = "yaml:\"epoch_counting_started\""
   ]; 
-  reserved = 7; 
 
   // current epoch start height is the block height at which the current epoch
   // started. (The block height at which the timer last ticked)
-  uint64 currentEpochStartHeight = 8 [
+  int64 currentEpochStartHeight = 7 [
     (gogoproto.jsontag) = "current_epoch_start_height,omitempty",
     (gogoproto.moretags) = "yaml:\"current_epoch_start_height\""
   ]; 
