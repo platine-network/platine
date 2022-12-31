@@ -24,7 +24,7 @@ message Distribution {
   ]; 
 
   // developer pool defines the proportion of the minted mint denom 
-  // to pay developers for their past and future work
+  // to pay dApp developers
   string developerPool = 3 [
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.moretags) = "yaml:\"developer_pool\"",
