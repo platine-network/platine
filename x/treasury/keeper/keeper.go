@@ -188,6 +188,12 @@ func (k Keeper) DistributeMintedCoin(ctx sdk.Context, mintedCoin sdk.Coin) error
 		return err
 	}
 	*/
+	communityCoins := sdk.NewCoins(k.GetDistributions(ctx, mintedCoin, distributions.CommunityPool))
+	err = k.distrKeeper.FundCommunityPool(ctx, communityCoins, k.accountKeeper.GetModuleAddress(types.ModuleName))
+	if err != nil {
+		return err
+	}
+
 	k.hooks.AfterDistributeMintedCoin(ctx, mintedCoin)
 
 	return err
