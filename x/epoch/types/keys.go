@@ -27,8 +27,3 @@ var KeyPrefixEpoch = []byte{0x01}
 func KeyPrefix(p string) []byte {
 	return []byte(p)
 }
-
-const (
-	EpochKey      = "Epoch/value/"
-	EpochCountKey = "Epoch/count/"
-)

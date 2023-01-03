@@ -12,7 +12,7 @@ import (
 func (k Keeper) BeginBlocker(ctx sdk.Context) {
 	defer telemetry.ModuleMeasureSince(types.ModuleName, time.Now(), telemetry.MetricKeyBeginBlocker)
 	k.IterateEpochs(ctx, func(index int64, epoch types.Epoch) (stop bool) {
-		logger := k.Logger(cxt)
+		logger := k.Logger(ctx)
 
 		// If blocktime < initial epoch start time, return
 		if ctx.BlockTime().Before(epoch.StartTime) {
@@ -56,7 +56,7 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) {
 				),
 			)
 
-			k.setEpoch(ctx, epoch)
+			k.SetEpoch(ctx, epoch)
 			k.BeforeEpochStart(ctx, epoch.Identifier, epoch.CurrentEpoch)
 
 			return false

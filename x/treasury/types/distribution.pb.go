@@ -32,7 +32,7 @@ type Distribution struct {
 	// to be allocated as ecosystem pool incentives.
 	EcosystemPool github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,2,opt,name=ecosystemPool,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"ecosystem_pool,omitempty" yaml:"ecosystem_pool"`
 	// developer pool defines the proportion of the minted mint denom
-	// to pay developers for their past and future work
+	// to pay dApp developers
 	DeveloperPool github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,3,opt,name=developerPool,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"developer_pool,omitempty" yaml:"developer_pool"`
 	// reward pool defines the proportion of the minted mint denom that is to be
 	// allocated for rewards activities.

@@ -45206,7 +45206,7 @@ paths:
                           developer pool defines the proportion of the minted
                           mint denom 
 
-                          to pay developers for their past and future work
+                          to pay dApp developers
                       rewardPool:
                         type: string
                         description: >-
@@ -75153,7 +75153,7 @@ definitions:
         type: string
         title: |-
           developer pool defines the proportion of the minted mint denom 
-          to pay developers for their past and future work
+          to pay dApp developers
       rewardPool:
         type: string
         description: >-
@@ -75219,7 +75219,7 @@ definitions:
             type: string
             title: |-
               developer pool defines the proportion of the minted mint denom 
-              to pay developers for their past and future work
+              to pay dApp developers
           rewardPool:
             type: string
             description: >-
@@ -75325,7 +75325,7 @@ definitions:
                   developer pool defines the proportion of the minted mint
                   denom 
 
-                  to pay developers for their past and future work
+                  to pay dApp developers
               rewardPool:
                 type: string
                 description: >-

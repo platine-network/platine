@@ -7,8 +7,8 @@ import (
 )
 
 type EpochHooks interface {
-	AfterEpochEnd(ctx sdk.context, identifier string, epochNumber int64) error
-	BeforeEpochStart(ctx sdk.context, identifier string, epochNumber int64) error
+	AfterEpochEnd(ctx sdk.Context, identifier string, epochNumber int64) error
+	BeforeEpochStart(ctx sdk.Context, identifier string, epochNumber int64) error
 }
 type MultiEpochHooks []EpochHooks
 
@@ -18,7 +18,7 @@ func NewMultiEpochHooks(hooks ...EpochHooks) MultiEpochHooks {
 	return hooks
 }
 
-func (h MultiEpochHooks) AfterEpochEnd(ctx sdk.context, identifier string, epochNumber int64) error {
+func (h MultiEpochHooks) AfterEpochEnd(ctx sdk.Context, identifier string, epochNumber int64) error {
 	for i := range h {
 		panicCatchingEpochHook(ctx, h[i].AfterEpochEnd, identifier, epochNumber)
 	}
@@ -26,7 +26,7 @@ func (h MultiEpochHooks) AfterEpochEnd(ctx sdk.context, identifier string, epoch
 	return nil
 }
 
-func (h MultiEpochHooks) BeforeEpochStart(ctx sdk.context, identifier string, epochNumber int64) error {
+func (h MultiEpochHooks) BeforeEpochStart(ctx sdk.Context, identifier string, epochNumber int64) error {
 	for i := range h {
 		panicCatchingEpochHook(ctx, h[i].BeforeEpochStart, identifier, epochNumber)
 	}
@@ -35,13 +35,13 @@ func (h MultiEpochHooks) BeforeEpochStart(ctx sdk.context, identifier string, ep
 }
 
 func panicCatchingEpochHook(
-	ctx sdk.context, 
-	hookFn func(ctx sdk.context, identifier string, epochNumber int64) error,
+	ctx sdk.Context, 
+	hookFn func(ctx sdk.Context, identifier string, epochNumber int64) error,
 	identifier string,
 	epochNumber int64,
 ) {
-	wrappedHookFn := func(ctx sdk.context) error {
-		return hookFn(cxt, identifier, epochNumber)
+	wrappedHookFn := func(ctx sdk.Context) error {
+		return hookFn(ctx, identifier, epochNumber)
 	}
 
 	err := utils.ApplyFuncIfNoError(ctx, wrappedHookFn)

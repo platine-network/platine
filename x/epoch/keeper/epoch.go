@@ -85,7 +85,7 @@ func (k Keeper) IterateEpochs(ctx sdk.Context, fn func(index int64, epoch types.
 
 
 // AllEpochs returns all epoch
-func (k Keeper) AllEpochs(ctx sdk.Context) []types.Epoch {
+func (k Keeper) AllEpoch(ctx sdk.Context) []types.Epoch {
 	epochs := []types.Epoch{}
 	k.IterateEpochs(ctx, func(intdex int64, epoch types.Epoch) (stop bool) {
 		epochs = append(epochs, epoch)

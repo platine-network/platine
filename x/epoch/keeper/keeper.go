@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/cosmos/cosmos-sdk/codec"
+	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/platine-network/platine/x/epoch/types"
 	"github.com/tendermint/tendermint/libs/log"
@@ -16,7 +17,7 @@ type (
 	}
 )
 
-func NewKeeper(cdc codec.Codec, storeKey sdk.StoreKey) *Keeper {
+func NewKeeper(cdc codec.Codec, storeKey storetypes.StoreKey) *Keeper {
 	return &Keeper{
 		storeKey: storeKey,
 	}
