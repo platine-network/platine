@@ -1,8 +1,8 @@
 package cli
 
 import (
+    "fmt"
     "context"
-    "strconv"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -10,68 +10,29 @@ import (
     "github.com/platine-network/platine/x/treasury/types"
 )
 
-func CmdListMinter() *cobra.Command {
+func CmdQueryEpochProvision() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "list-minter",
-		Short: "list all minter",
+		Use:   "epoch-provision",
+		Short: "Query the current treasury epoch provision",
+		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-            clientCtx := client.GetClientContextFromCmd(cmd)
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
 
-            pageReq, err := client.ReadPageRequest(cmd.Flags())
-            if err != nil {
-                return err
-            }
+			queryClient := types.NewQueryClient(clientCtx)
 
-            queryClient := types.NewQueryClient(clientCtx)
+			res, err := queryClient.EpochProvision(context.Background(), &types.QueryEpochProvisionRequest{})
+			if err != nil {
+				return err
+			}
 
-            params := &types.QueryAllMinterRequest{
-                Pagination: pageReq,
-            }
-
-            res, err := queryClient.MinterAll(context.Background(), params)
-            if err != nil {
-                return err
-            }
-
-            return clientCtx.PrintProto(res)
-		},
-	}
-
-	flags.AddPaginationFlagsToCmd(cmd, cmd.Use)
-	flags.AddQueryFlagsToCmd(cmd)
-
-    return cmd
-}
-
-func CmdShowMinter() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "show-minter [id]",
-		Short: "shows a minter",
-		Args:  cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
-            clientCtx := client.GetClientContextFromCmd(cmd)
-
-            queryClient := types.NewQueryClient(clientCtx)
-
-            id, err := strconv.ParseUint(args[0], 10, 64)
-            if err != nil {
-                return err
-            }
-
-            params := &types.QueryGetMinterRequest{
-                Id: id,
-            }
-
-            res, err := queryClient.Minter(context.Background(), params)
-            if err != nil {
-                return err
-            }
-
-            return clientCtx.PrintProto(res)
+			return clientCtx.PrintString(fmt.Sprintf("%s\n", &res.EpochProvision))
 		},
 	}
 
 	flags.AddQueryFlagsToCmd(cmd)
 
-    return cmd
+	return cmd
 }

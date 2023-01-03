@@ -1,17 +1,18 @@
 package types
 
-import (
-"fmt"
-)
-
-// DefaultIndex is the default global index
-const DefaultIndex uint64 = 1
+func NewGenesisState(minter Minter, params Params, reductionStartEpoch int64) *GenesisState {
+	return &GenesisState{
+		Minter: minter,
+		Params: params,
+		ReductionStartEpoch: reductionStartEpoch,
+	}
+}
 
 // DefaultGenesis returns the default genesis state
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
-	    MinterList: []Minter{},
-DistributionList: []Distribution{},
+		ReductionStartEpoch: 0,
+		Minter: DefaultInitialMinter(),
 // this line is used by starport scaffolding # genesis/types/default
 	    Params:	DefaultParams(),
 	}
@@ -20,31 +21,9 @@ DistributionList: []Distribution{},
 // Validate performs basic genesis state validation returning an error upon any
 // failure.
 func (gs GenesisState) Validate() error {
-    // Check for duplicated ID in minter
-minterIdMap := make(map[uint64]bool)
-minterCount := gs.GetMinterCount()
-for _, elem := range gs.MinterList {
-	if _, ok := minterIdMap[elem.Id]; ok {
-		return fmt.Errorf("duplicated id for minter")
+  if err := gs.Params.Validate(); err != nil {
+		return err
 	}
-	if elem.Id >= minterCount {
-		return fmt.Errorf("minter id should be lower or equal than the last id")
-	}
-	minterIdMap[elem.Id] = true
-}
-// Check for duplicated ID in distribution
-distributionIdMap := make(map[uint64]bool)
-distributionCount := gs.GetDistributionCount()
-for _, elem := range gs.DistributionList {
-	if _, ok := distributionIdMap[elem.Id]; ok {
-		return fmt.Errorf("duplicated id for distribution")
-	}
-	if elem.Id >= distributionCount {
-		return fmt.Errorf("distribution id should be lower or equal than the last id")
-	}
-	distributionIdMap[elem.Id] = true
-}
-// this line is used by starport scaffolding # genesis/types/validate
 
-	return gs.Params.Validate()
+	return gs.Minter.Validate()
 }

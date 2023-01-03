@@ -20,6 +20,7 @@ const (
 
 	AttributeEpochNumber = "epoch_number"
 	AttributeEpochStartTime = "start_time"
+	AttributeEpochProvision = "epoch_provision"
 )
 
 var KeyPrefixEpoch = []byte{0x01}
