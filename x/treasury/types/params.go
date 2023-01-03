@@ -49,7 +49,7 @@ func NewParams(
 
 func DefaultParams() Params {
 	return Params{
-		MintDenom: sdk.DefaultBondDenom,
+		MintDenom: "uplc",
 		GenesisEpochProvision: sdk.NewDec(1000000000),
 		EpochIdentifier: "minute",
 		ReductionPeriodEpochs: 6,

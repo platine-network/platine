@@ -524,25 +524,37 @@ func New(
 		app.BankKeeper,
 	)
 	tokenModule := tokenmodule.NewAppModule(appCodec, app.TokenKeeper, app.BankKeeper)
+	
+	app.TreasuryKeeper = treasurymodulekeeper.NewKeeper(
+		appCodec,
+		keys[treasurymoduletypes.StoreKey],
+		app.GetSubspace(treasurymoduletypes.ModuleName),
+		app.AccountKeeper,
+		app.BankKeeper,
+		app.DistrKeeper,
+		app.EpochKeeper,
+		authtypes.FeeCollectorName,
+	)
+	treasuryModule := treasurymodule.NewAppModule(
+		appCodec, 
+		app.TreasuryKeeper, 
+		app.AccountKeeper, 
+		app.BankKeeper,
+	)
 
 	app.EpochKeeper = *epochmodulekeeper.NewKeeper(
 		appCodec,
 		keys[epochmoduletypes.StoreKey],
-		keys[epochmoduletypes.MemStoreKey],
 	)
+
+	app.EpochKeeper.SetHooks(
+		epochmoduletypes.NewMultiEpochHooks(
+			app.TreasuryKeeper.Hooks(),
+		),
+	)
+
 	epochModule := epochmodule.NewAppModule(appCodec, app.EpochKeeper)
 
-	
-	app.TreasuryKeeper = *treasurymodulekeeper.NewKeeper(
-		appCodec,
-		keys[treasurymoduletypes.StoreKey],
-		keys[treasurymoduletypes.MemStoreKey],
-		app.GetSubspace(treasurymoduletypes.ModuleName),
-		app.BankKeeper,
-		app.AccountKeeper,
-		app.EpochKeeper,
-	)
-	treasuryModule := treasurymodule.NewAppModule(appCodec, app.TreasuryKeeper, app.AccountKeeper, app.BankKeeper)
 
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
@@ -712,7 +724,6 @@ func New(
 		evidence.NewAppModule(app.EvidenceKeeper),
 		ibc.NewAppModule(app.IBCKeeper),
 		transferModule,
-		treasuryModule,
 // this line is used by starport scaffolding # stargate/app/appModule
 	)
 	app.sm.RegisterStoreDecoders()
