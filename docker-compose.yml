@@ -16,4 +16,4 @@ services:
       - STAKE_TOKEN=uplc
       - CHAIN_ID=platine-1
       - PASSWORD=platinepwd
-    command: ['/opt/chain_run','platine10m200kns6lle7dxfc7fffvma83v3ew87e9ygqk']
+    command: ['/opt/run.sh','platine1knrqvl059ymv0qytxac02e6n4sm8dwh999x6df']

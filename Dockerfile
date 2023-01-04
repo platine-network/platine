@@ -24,7 +24,7 @@ COPY --from=go-builder /code/build/$APPNAME /usr/bin/$APPNAME
 
 COPY ./scripts/docker/* /opt/
 
-RUN chmod +x /opt/chain_*
+RUN chmod +x /opt/*.sh
 
 # rest server
 EXPOSE 1317
