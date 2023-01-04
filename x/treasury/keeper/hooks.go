@@ -3,14 +3,15 @@ package keeper
 import (
 	"fmt"
 
-	"github.com/cosmos/cosmos-sdk/telemetry"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	epochtypes "github.com/platine-network/platine/x/epoch/types"
 	"github.com/platine-network/platine/x/treasury/types"
+
+	"github.com/cosmos/cosmos-sdk/telemetry"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func (k Keeper) BeforeEpochStart(ctx sdk.Context, identifier string, epochNumber int64) {
-	
+
 }
 
 func (k Keeper) AfterEpochEnd(ctx sdk.Context, identifier string, epochNumber int64) {
@@ -31,7 +32,7 @@ func (k Keeper) AfterEpochEnd(ctx sdk.Context, identifier string, epochNumber in
 		// This avoids issues with measuring in block numbers, as epochs have fixed intervals, with very
 		// low variance at the relevant sizes. As a result, it is safe to store the epoch number
 		// of the last reduction to be later retrieved for comparison.
-		if epochNumber >= k.GetParams(ctx).ReductionPeriodEpochs + k.GetLastReductionEpochNum(ctx) {
+		if epochNumber >= k.GetParams(ctx).ReductionPeriodEpochs+k.GetLastReductionEpochNum(ctx) {
 			// Reduce the reward per reduction period
 			minter.Provision = minter.NextEpochProvision(params)
 			k.SetMinter(ctx, minter)

@@ -9,14 +9,12 @@ LEDGER_ENABLED ?= true
 BINDIR ?= $(GOPATH)/bin
 BUILDDIR ?= $(CURDIR)/build
 GOPATH ?= $(shell $(GO) env GOPATH)
+# Default version
+VERSION := $(shell echo $(shell git describe --tags --always) | sed 's/^v//')
 
 # don't override user values
 ifeq (,$(VERSION))
-	VERSION := $(shell git describe --tags)
-	# if VERSION is empty, then populate it with branch's name and raw commit hash
-	ifeq (,$(VERSION))
-		VERSION := $(BRANCH)-$(COMMIT)
-	endif
+	VERSION := $(BRANCH)-$(COMMIT)
 endif
 
 TM_VERSION := $(shell go list -m github.com/tendermint/tendermint | sed 's:.* ::')
@@ -197,6 +195,6 @@ lint-fix:
 ifeq (,$(shell which golangci-lint))
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.46.2
 endif
-	golangci-lint run --fix --out-format=tab --issues-exit-code=0
+	golangci-lint run --fix --out-format=tab --issues-exit-code=0 --timeout=10m
 
 .PHONY: lint format lint-fix

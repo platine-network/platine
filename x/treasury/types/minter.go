@@ -1,16 +1,18 @@
 package types
+
 import (
 	"errors"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 var (
-	errNilEpochProvision = errors.New("epoch provision was nil in genesis")
+	errNilEpochProvision      = errors.New("epoch provision was nil in genesis")
 	errNegativeEpochProvision = errors.New("epoch provision must be positive")
 )
 
 func NewMinter(epochProvision sdk.Dec) Minter {
-	return Minter {
+	return Minter{
 		Provision: epochProvision,
 	}
 }

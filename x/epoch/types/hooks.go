@@ -2,8 +2,10 @@ package types
 
 import (
 	"fmt"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/platine-network/platine/utils"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 type EpochHooks interface {
@@ -35,7 +37,7 @@ func (h MultiEpochHooks) BeforeEpochStart(ctx sdk.Context, identifier string, ep
 }
 
 func panicCatchingEpochHook(
-	ctx sdk.Context, 
+	ctx sdk.Context,
 	hookFn func(ctx sdk.Context, identifier string, epochNumber int64) error,
 	identifier string,
 	epochNumber int64,

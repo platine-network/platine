@@ -4,10 +4,11 @@ import (
 	"fmt"
 	// this line is used by starport scaffolding # 1
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/platine-network/platine/x/token/keeper"
 	"github.com/platine-network/platine/x/token/types"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 func NewHandler(k keeper.Keeper) sdk.Handler {

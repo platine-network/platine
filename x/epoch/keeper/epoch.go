@@ -5,8 +5,9 @@ import (
 	"time"
 
 	"github.com/gogo/protobuf/proto"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/platine-network/platine/x/epoch/types"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // GetEpoch returns a epoch from its id
@@ -21,7 +22,7 @@ func (k Keeper) GetEpoch(ctx sdk.Context, id string) types.Epoch {
 	if err != nil {
 		panic(err)
 	}
-	
+
 	return epoch
 }
 
@@ -40,7 +41,7 @@ func (k Keeper) AddEpoch(ctx sdk.Context, epoch types.Epoch) error {
 		epoch.StartTime = ctx.BlockTime()
 		epoch.CurrentEpochStartHeight = ctx.BlockHeight()
 	}
-	
+
 	k.SetEpoch(ctx, epoch)
 
 	return nil
@@ -67,7 +68,7 @@ func (k Keeper) IterateEpochs(ctx sdk.Context, fn func(index int64, epoch types.
 	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefixEpoch)
 	defer iterator.Close()
 
-	i:= int64(0)
+	i := int64(0)
 	for ; iterator.Valid(); iterator.Next() {
 		epoch := types.Epoch{}
 		err := proto.Unmarshal(iterator.Value(), &epoch)
@@ -82,7 +83,6 @@ func (k Keeper) IterateEpochs(ctx sdk.Context, fn func(index int64, epoch types.
 		i++
 	}
 }
-
 
 // AllEpochs returns all epoch
 func (k Keeper) AllEpoch(ctx sdk.Context) []types.Epoch {

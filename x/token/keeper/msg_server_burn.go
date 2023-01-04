@@ -4,9 +4,10 @@ import (
 	"context"
 	"strconv"
 
+	"github.com/platine-network/platine/x/token/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/platine-network/platine/x/token/types"
 )
 
 func (k msgServer) Burn(goCtx context.Context, msg *types.MsgBurn) (*types.MsgBurnResponse, error) {

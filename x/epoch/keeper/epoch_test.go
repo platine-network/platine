@@ -3,12 +3,13 @@ package keeper_test
 import (
 	"testing"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	keepertest "github.com/platine-network/platine/testutil/keeper"
 	"github.com/platine-network/platine/testutil/nullify"
 	"github.com/platine-network/platine/x/epoch/keeper"
 	"github.com/platine-network/platine/x/epoch/types"
 	"github.com/stretchr/testify/require"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func createNEpoch(keeper *keeper.Keeper, ctx sdk.Context, n int) []types.Epoch {

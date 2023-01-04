@@ -3,12 +3,13 @@ package keeper_test
 import (
 	"testing"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	keepertest "github.com/platine-network/platine/testutil/keeper"
 	"github.com/platine-network/platine/testutil/nullify"
 	"github.com/platine-network/platine/x/token/keeper"
 	"github.com/platine-network/platine/x/token/types"
 	"github.com/stretchr/testify/require"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func createNToken(keeper *keeper.Keeper, ctx sdk.Context, n int) []types.Token {

@@ -5,23 +5,24 @@ import (
 	"fmt"
 	"strings"
 
+	epochtypes "github.com/platine-network/platine/x/epoch/types"
+	yaml "gopkg.in/yaml.v2"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	yaml "gopkg.in/yaml.v2"
-	epochtypes "github.com/platine-network/platine/x/epoch/types"
 )
 
 var (
-	KeyMintDenom = []byte("MintDenom")
-	KeyGenesisEpochProvision = []byte("GenesisEpochProvision")
-	KeyEpochIdentifier = []byte("EpochIdentifier")
-	KeyReductionPeriodEpochs = []byte("ReductionPeriodEpochs")
-	KeyReductionFactor = []byte("ReductionFactor")
-	KeyAllocationRatio = []byte("AllocationRatio")
+	KeyMintDenom                    = []byte("MintDenom")
+	KeyGenesisEpochProvision        = []byte("GenesisEpochProvision")
+	KeyEpochIdentifier              = []byte("EpochIdentifier")
+	KeyReductionPeriodEpochs        = []byte("ReductionPeriodEpochs")
+	KeyReductionFactor              = []byte("ReductionFactor")
+	KeyAllocationRatio              = []byte("AllocationRatio")
 	KeyRewardDistributionStartEpoch = []byte("RewardDistributionStartEpoch")
-	KeyEcosystemPoolAddress = []byte("EcosystemPoolAddress")
-	KeyDeveloperPoolAddress = []byte("DeveloperPoolAddress")
-	KeyRewardPoolAddress = []byte("RewardPoolAddress")
+	KeyEcosystemPoolAddress         = []byte("EcosystemPoolAddress")
+	KeyDeveloperPoolAddress         = []byte("DeveloperPoolAddress")
+	KeyRewardPoolAddress            = []byte("RewardPoolAddress")
 )
 
 func ParamKeyTable() paramtypes.KeyTable {
@@ -30,41 +31,41 @@ func ParamKeyTable() paramtypes.KeyTable {
 
 func NewParams(
 	mintDenom string, genesisEpochProvision sdk.Dec, epochIdentifier string, reductionFactor sdk.Dec,
-	reductionPeriodEpochs int64, distribution Distribution, rewardDistributionStartEpoch int64, 
+	reductionPeriodEpochs int64, distribution Distribution, rewardDistributionStartEpoch int64,
 	ecosystemPoolAddress string, developerPoolAddress string, rewardPoolAddress string,
 ) Params {
 	return Params{
-		MintDenom: mintDenom,
-		GenesisEpochProvision: genesisEpochProvision,
-		EpochIdentifier: epochIdentifier,
-		ReductionPeriodEpochs: reductionPeriodEpochs,
-		ReductionFactor: reductionFactor,
-		Distribution: distribution,
+		MintDenom:                    mintDenom,
+		GenesisEpochProvision:        genesisEpochProvision,
+		EpochIdentifier:              epochIdentifier,
+		ReductionPeriodEpochs:        reductionPeriodEpochs,
+		ReductionFactor:              reductionFactor,
+		Distribution:                 distribution,
 		RewardDistributionStartEpoch: rewardDistributionStartEpoch,
-		EcosystemPoolAddress: ecosystemPoolAddress,
-		DeveloperPoolAddress: developerPoolAddress,
-		RewardPoolAddress: rewardPoolAddress,
+		EcosystemPoolAddress:         ecosystemPoolAddress,
+		DeveloperPoolAddress:         developerPoolAddress,
+		RewardPoolAddress:            rewardPoolAddress,
 	}
 }
 
 func DefaultParams() Params {
 	return Params{
-		MintDenom: "uplc",
+		MintDenom:             "uplc",
 		GenesisEpochProvision: sdk.NewDec(1000000000),
-		EpochIdentifier: "minute",
+		EpochIdentifier:       "minute",
 		ReductionPeriodEpochs: 6,
-		ReductionFactor: sdk.NewDecWithPrec(666666666666666666, 18), //2/3
+		ReductionFactor:       sdk.NewDecWithPrec(666666666666666666, 18), //2/3
 		Distribution: Distribution{
-			StakingPool: sdk.NewDecWithPrec(4, 1), // 0.4
+			StakingPool:   sdk.NewDecWithPrec(4, 1), // 0.4
 			EcosystemPool: sdk.NewDecWithPrec(2, 1), // 0.2
 			DeveloperPool: sdk.NewDecWithPrec(2, 1), // 0.2
-			RewardPool: sdk.NewDecWithPrec(1, 1), // 0.1
+			RewardPool:    sdk.NewDecWithPrec(1, 1), // 0.1
 			CommunityPool: sdk.NewDecWithPrec(1, 1), //0.1
 		},
 		RewardDistributionStartEpoch: 1,
-		EcosystemPoolAddress: "",
-		DeveloperPoolAddress: "",
-		RewardPoolAddress: "",
+		EcosystemPoolAddress:         "",
+		DeveloperPoolAddress:         "",
+		RewardPoolAddress:            "",
 	}
 }
 
@@ -127,7 +128,6 @@ func (p Params) Validate() error {
 	return nil
 }
 
-
 func (p Params) String() string {
 	out, _ := yaml.Marshal(p)
 	return string(out)
@@ -174,7 +174,6 @@ func validateGenesisEpochProvision(i interface{}) error {
 	return nil
 }
 
-
 func validateReductionFactor(i interface{}) error {
 	v, ok := i.(sdk.Dec)
 	if !ok {
@@ -184,7 +183,7 @@ func validateReductionFactor(i interface{}) error {
 	if v.GT(sdk.NewDec(1)) {
 		return fmt.Errorf("reduction factor can not be greather than 1")
 	}
-	
+
 	if v.IsNegative() {
 		return fmt.Errorf("reduction factor must be positive")
 	}
@@ -245,7 +244,7 @@ func validateMintDenom(i interface{}) error {
 		return fmt.Errorf("invalid parameter type %T", i)
 	}
 
-	if strings.TrimSpace(v) == ""{
+	if strings.TrimSpace(v) == "" {
 		return errors.New("mint denom can not be blank")
 	}
 

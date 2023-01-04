@@ -3,8 +3,9 @@ package keeper
 import (
 	"context"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/platine-network/platine/x/treasury/types"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func (k Keeper) EpochProvision(c context.Context, _ *types.QueryEpochProvisionRequest) (*types.QueryEpochProvisionResponse, error) {

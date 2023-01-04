@@ -1,13 +1,14 @@
 package cli
 
 import (
-    "fmt"
-    "context"
+	"context"
+	"fmt"
+
+	"github.com/platine-network/platine/x/treasury/types"
+	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/spf13/cobra"
-    "github.com/platine-network/platine/x/treasury/types"
 )
 
 func CmdQueryEpochProvision() *cobra.Command {

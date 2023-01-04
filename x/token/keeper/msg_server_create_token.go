@@ -4,9 +4,10 @@ import (
 	"context"
 	"strings"
 
+	"github.com/platine-network/platine/x/token/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/platine-network/platine/x/token/types"
 )
 
 func (k msgServer) CreateToken(goCtx context.Context, msg *types.MsgCreateToken) (*types.MsgCreateTokenResponse, error) {

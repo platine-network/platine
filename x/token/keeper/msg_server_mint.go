@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/platine-network/platine/x/token/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/platine-network/platine/x/token/types"
 )
 
 func (k msgServer) Mint(goCtx context.Context, msg *types.MsgMint) (*types.MsgMintResponse, error) {

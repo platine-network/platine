@@ -1,9 +1,10 @@
 package epoch
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/platine-network/platine/x/epoch/keeper"
 	"github.com/platine-network/platine/x/epoch/types"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // InitGenesis initializes the module's state from a provided genesis state.

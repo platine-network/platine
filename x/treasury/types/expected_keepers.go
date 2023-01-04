@@ -1,17 +1,18 @@
 package types
 
 import (
+	epochtypes "github.com/platine-network/platine/x/epoch/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
-	epochtypes "github.com/platine-network/platine/x/epoch/types"
 )
 
 type EpochKeeper interface {
-	GetEpoch(ctx sdk.Context, id string) epochtypes.Epoch 
+	GetEpoch(ctx sdk.Context, id string) epochtypes.Epoch
 }
 
 type DistrKeeper interface {
-	FundCommunityPool(ctx sdk.Context, amount sdk.Coins, sender sdk.AccAddress) error 
+	FundCommunityPool(ctx sdk.Context, amount sdk.Coins, sender sdk.AccAddress) error
 }
 
 // AccountKeeper defines the expected account keeper used for simulations (noalias)

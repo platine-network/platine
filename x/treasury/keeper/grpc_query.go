@@ -5,4 +5,3 @@ import (
 )
 
 var _ types.QueryServer = Keeper{}
-

@@ -20,4 +20,3 @@ func (h MultiMintHooks) AfterDistributeMintedCoin(ctx sdk.Context, mintedCoin sd
 		h[i].AfterDistributeMintedCoin(ctx, mintedCoin)
 	}
 }
-

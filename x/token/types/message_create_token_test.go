@@ -3,9 +3,10 @@ package types
 import (
 	"testing"
 
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/platine-network/platine/testutil/sample"
 	"github.com/stretchr/testify/require"
+
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 func TestMsgCreateToken_ValidateBasic(t *testing.T) {

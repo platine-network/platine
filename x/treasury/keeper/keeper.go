@@ -2,8 +2,10 @@ package keeper
 
 import (
 	"fmt"
-	"github.com/tendermint/tendermint/libs/log"
+
 	"github.com/platine-network/platine/x/treasury/types"
+	"github.com/tendermint/tendermint/libs/log"
+
 	"github.com/cosmos/cosmos-sdk/codec"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -12,25 +14,25 @@ import (
 
 type (
 	Keeper struct {
-		cdc      	codec.BinaryCodec
-		storeKey 	storetypes.StoreKey
-		paramSpace	paramtypes.Subspace
-    accountKeeper types.AccountKeeper
-    bankKeeper types.BankKeeper
-    distrKeeper types.DistrKeeper
-    epochKeeper types.EpochKeeper
-    hooks types.MintHooks
-    feeCollectorName string
+		cdc              codec.BinaryCodec
+		storeKey         storetypes.StoreKey
+		paramSpace       paramtypes.Subspace
+		accountKeeper    types.AccountKeeper
+		bankKeeper       types.BankKeeper
+		distrKeeper      types.DistrKeeper
+		epochKeeper      types.EpochKeeper
+		hooks            types.MintHooks
+		feeCollectorName string
 	}
 )
 
 func NewKeeper(
-    cdc codec.BinaryCodec, key storetypes.StoreKey, ps paramtypes.Subspace,
-    ak types.AccountKeeper, bk types.BankKeeper, dk types.DistrKeeper, ek types.EpochKeeper, 
-		feeCollectorName string,
+	cdc codec.BinaryCodec, key storetypes.StoreKey, ps paramtypes.Subspace,
+	ak types.AccountKeeper, bk types.BankKeeper, dk types.DistrKeeper, ek types.EpochKeeper,
+	feeCollectorName string,
 ) Keeper {
 	// ensure mint module account is set
-	if addr := ak.GetModuleAddress(types.ModuleName); addr == nil{
+	if addr := ak.GetModuleAddress(types.ModuleName); addr == nil {
 		panic("treasury module account is not set")
 	}
 	// set KeyTable if it has not already been set
@@ -39,14 +41,14 @@ func NewKeeper(
 	}
 
 	return Keeper{
-		cdc:      	cdc,
-		storeKey: 	key,
-		paramSpace:	ps,
-    accountKeeper: ak,
-    bankKeeper: bk,
-    distrKeeper: dk,
-    epochKeeper: ek,
-    feeCollectorName: feeCollectorName,
+		cdc:              cdc,
+		storeKey:         key,
+		paramSpace:       ps,
+		accountKeeper:    ak,
+		bankKeeper:       bk,
+		distrKeeper:      dk,
+		epochKeeper:      ek,
+		feeCollectorName: feeCollectorName,
 	}
 }
 
@@ -54,7 +56,7 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }
 
-func (k *Keeper) SetHooks(mh types.MintHooks) *Keeper{
+func (k *Keeper) SetHooks(mh types.MintHooks) *Keeper {
 	if k.hooks != nil {
 		panic("Can not set mint hooks twice")
 	}
@@ -106,7 +108,6 @@ func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
 	k.paramSpace.SetParamSet(ctx, &params)
 }
 
-
 func (k Keeper) MintCoins(ctx sdk.Context, newCoins sdk.Coins) error {
 	if newCoins.Empty() {
 		return nil
@@ -114,7 +115,6 @@ func (k Keeper) MintCoins(ctx sdk.Context, newCoins sdk.Coins) error {
 
 	return k.bankKeeper.MintCoins(ctx, types.ModuleName, newCoins)
 }
-
 
 func (k Keeper) GetDistributions(ctx sdk.Context, mintedCoin sdk.Coin, ratio sdk.Dec) sdk.Coin {
 	return sdk.NewCoin(mintedCoin.Denom, sdk.NewDecFromInt(mintedCoin.Amount).Mul(ratio).TruncateInt())
@@ -182,11 +182,11 @@ func (k Keeper) DistributeMintedCoin(ctx sdk.Context, mintedCoin sdk.Coin) error
 	}
 
 	/*
-	communityCoins := sdk.NewCoins(mintedCoin).Sub(stakingCoins).Sub(ecosystemCoins).Sub(developerCoins).Sub(rewardCoins)
-	err = k.distrKeeper.FundCommunityPool(ctx, communityCoins, k.accountKeeper.GetModuleAddress(types.ModuleName))
-	if err != nil {
-		return err
-	}
+		communityCoins := sdk.NewCoins(mintedCoin).Sub(stakingCoins).Sub(ecosystemCoins).Sub(developerCoins).Sub(rewardCoins)
+		err = k.distrKeeper.FundCommunityPool(ctx, communityCoins, k.accountKeeper.GetModuleAddress(types.ModuleName))
+		if err != nil {
+			return err
+		}
 	*/
 	communityCoins := sdk.NewCoins(k.GetDistributions(ctx, mintedCoin, distributions.CommunityPool))
 	err = k.distrKeeper.FundCommunityPool(ctx, communityCoins, k.accountKeeper.GetModuleAddress(types.ModuleName))

@@ -14,15 +14,15 @@ func NewGenesisState(epochs []Epoch) *GenesisState {
 
 // DefaultGenesis returns the default genesis state
 func DefaultGenesis() *GenesisState {
-		epochs := []Epoch{
-			NewGenesisEpoch("minute", time.Minute),
-			NewGenesisEpoch("day", time.Hour * 24),
-			NewGenesisEpoch("hour", time.Hour),
-			NewGenesisEpoch("week", time.Hour * 24 * 7),
-		}
+	epochs := []Epoch{
+		NewGenesisEpoch("minute", time.Minute),
+		NewGenesisEpoch("day", time.Hour*24),
+		NewGenesisEpoch("hour", time.Hour),
+		NewGenesisEpoch("week", time.Hour*24*7),
+	}
 
-		return NewGenesisState(epochs)
-		// this line is used by starport scaffolding # genesis/types/default
+	return NewGenesisState(epochs)
+	// this line is used by starport scaffolding # genesis/types/default
 }
 
 // Validate performs basic genesis state validation returning an error upon any
@@ -66,12 +66,12 @@ func (epoch Epoch) Validate() error {
 
 func NewGenesisEpoch(identifier string, duration time.Duration) Epoch {
 	return Epoch{
-		Identifier: identifier,
-		StartTime: time.Time{},
-		Duration: duration,
-		CurrentEpoch: 0,
+		Identifier:              identifier,
+		StartTime:               time.Time{},
+		Duration:                duration,
+		CurrentEpoch:            0,
 		CurrentEpochStartHeight: 0,
-		CurrentEpochStartTime: time.Time{},
-		EpochCountingStarted: false,
+		CurrentEpochStartTime:   time.Time{},
+		EpochCountingStarted:    false,
 	}
 }

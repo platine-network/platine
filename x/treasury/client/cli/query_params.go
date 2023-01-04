@@ -3,10 +3,11 @@ package cli
 import (
 	"context"
 
+	"github.com/platine-network/platine/x/treasury/types"
+	"github.com/spf13/cobra"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/spf13/cobra"
-	"github.com/platine-network/platine/x/treasury/types"
 )
 
 func CmdQueryParams() *cobra.Command {

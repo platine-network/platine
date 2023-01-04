@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/platine-network/platine/x/epoch/types"
+
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/platine-network/platine/x/epoch/types"
 )
 
 func (k Keeper) BeginBlocker(ctx sdk.Context) {
@@ -48,17 +49,17 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) {
 			epoch.CurrentEpochStartTime = epoch.CurrentEpochStartTime.Add(epoch.Duration)
 			logger.Info(fmt.Sprintf("Starting epoch with identifier %s epoch number %d", epoch.Identifier, epoch.CurrentEpoch))
 		}
-			ctx.EventManager().EmitEvent(
-				sdk.NewEvent(
-					types.EventTypeEpochStart,
-					sdk.NewAttribute(types.AttributeEpochNumber, fmt.Sprintf("%d", epoch.CurrentEpoch)),
-					sdk.NewAttribute(types.AttributeEpochStartTime, fmt.Sprintf("%d", epoch.CurrentEpochStartTime.Unix())),
-				),
-			)
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent(
+				types.EventTypeEpochStart,
+				sdk.NewAttribute(types.AttributeEpochNumber, fmt.Sprintf("%d", epoch.CurrentEpoch)),
+				sdk.NewAttribute(types.AttributeEpochStartTime, fmt.Sprintf("%d", epoch.CurrentEpochStartTime.Unix())),
+			),
+		)
 
-			k.SetEpoch(ctx, epoch)
-			k.BeforeEpochStart(ctx, epoch.Identifier, epoch.CurrentEpoch)
+		k.SetEpoch(ctx, epoch)
+		k.BeforeEpochStart(ctx, epoch.Identifier, epoch.CurrentEpoch)
 
-			return false
+		return false
 	})
 }

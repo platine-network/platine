@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	// this line is used by starport scaffolding # 1
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -11,14 +12,15 @@ import (
 
 	abci "github.com/tendermint/tendermint/abci/types"
 
+	"github.com/platine-network/platine/x/token/client/cli"
+	"github.com/platine-network/platine/x/token/keeper"
+	"github.com/platine-network/platine/x/token/types"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/platine-network/platine/x/token/client/cli"
-	"github.com/platine-network/platine/x/token/keeper"
-	"github.com/platine-network/platine/x/token/types"
 )
 
 var (

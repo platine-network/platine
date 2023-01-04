@@ -15,10 +15,10 @@ const (
 )
 
 const (
-	EventTypeEpochEnd = "epoch_end"
+	EventTypeEpochEnd   = "epoch_end"
 	EventTypeEpochStart = "epoch_start"
 
-	AttributeEpochNumber = "epoch_number"
+	AttributeEpochNumber    = "epoch_number"
 	AttributeEpochStartTime = "start_time"
 	AttributeEpochProvision = "epoch_provision"
 )

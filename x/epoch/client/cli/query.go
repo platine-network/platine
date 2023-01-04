@@ -5,8 +5,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/platine-network/platine/x/epoch/types"
+
+	"github.com/cosmos/cosmos-sdk/client"
 )
 
 // GetQueryCmd returns the cli query commands for this module
