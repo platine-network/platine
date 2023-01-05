@@ -24,6 +24,9 @@ COPY --from=go-builder /code/build/$APPNAME /usr/bin/$APPNAME
 
 COPY ./scripts/docker/* /opt/
 
+# Fix windows issue
+RUN dos2unix /opt/*.sh
+
 RUN chmod +x /opt/*.sh
 
 # rest server
