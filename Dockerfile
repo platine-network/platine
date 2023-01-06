@@ -3,7 +3,7 @@ FROM golang:1.19.3-alpine3.16 AS go-builder
 ENV APPNAME=platined
 
 RUN ARCH=`uname -m`; echo ${ARCH};
-RUN apk add --no-cache ca-certificates build-base git linux-headers curl jq nano busybox-extras;
+RUN apk add --no-cache ca-certificates build-base git linux-headers;
 
 WORKDIR /code
 
@@ -15,6 +15,8 @@ RUN echo "Ensuring binary is statically linked ..." \
   && (file /code/build/$APPNAME | grep "statically linked")
 
 FROM alpine:3.16
+
+RUN apk add --no-cache ca-certificates curl jq nano busybox-extras;
 
 WORKDIR /chain
 
