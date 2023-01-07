@@ -1,0 +1,281 @@
+version: '3.8'
+
+services:
+  validator-1:
+    image: ${BUILD_IMAGE}
+    ports:
+      - target: 26656
+        published: 26656    # Tendermint peer-to-peer (P2P) port
+      - target: 26657
+        published: 26657    # Tendermint RPC port
+      - target: 1317
+        published: 1317     # Cosmos REST API port
+      - target: 9090
+        published: 9090     # gRPC port
+      - target: 9091
+        published: 9091     # gRPC-Gateway port
+      - target: 26660
+        published: 26660    # Prometheus metrics port
+    entrypoint: [ "node-start" ]
+    healthcheck:
+      test: curl -s http://localhost:26657/status | grep -c true
+      interval: 10s
+      timeout: 2s
+      retries: 6
+      start_period: 15s
+    volumes:
+      - type: volume
+        source: validator-1-data
+        target: /home/platined
+    env_file:
+      - env/validator-1.env
+    configs:
+      - source: genesis
+        target: /genesis
+      - source: seeds
+        target: /seeds
+      - source: validator-1-node-key
+        target: /node_key
+      - source: validator-1-priv-val-key
+        target: /priv_validator_key
+
+  validator-2:
+    image: ${BUILD_IMAGE}
+    ports:
+      - target: 26656
+        published: 26756    # Tendermint peer-to-peer (P2P) port
+      - target: 26657
+        published: 26757    # Tendermint RPC port
+      - target: 1317
+        published: 1417     # Cosmos REST API port
+      - target: 9090
+        published: 9190     # gRPC port
+      - target: 9091
+        published: 9191     # gRPC-Gateway port
+      - target: 26660
+        published: 26760    # Prometheus metrics port
+    entrypoint: [ "node-start" ]
+    healthcheck:
+      test: curl -s http://localhost:26757/status | grep -c true
+      interval: 10s
+      timeout: 2s
+      retries: 6
+      start_period: 15s
+    volumes:
+      - type: volume
+        source: validator-2-data
+        target: /home/platined
+    env_file:
+      - env/validator-2.env
+    configs:
+      - source: genesis
+        target: /genesis
+      - source: seeds
+        target: /seeds
+      - source: validator-2-node-key
+        target: /node_key
+      - source: validator-2-priv-val-key
+        target: /priv_validator_key
+
+  validator-3:
+    image: ${BUILD_IMAGE}
+    ports:
+      - target: 26656
+        published: 26856    # Tendermint peer-to-peer (P2P) port
+      - target: 26657
+        published: 26857    # Tendermint RPC port
+      - target: 1317
+        published: 1517     # Cosmos REST API port
+      - target: 9090
+        published: 9290     # gRPC port
+      - target: 9091
+        published: 9291     # gRPC-Gateway port
+      - target: 26660
+        published: 26860    # Prometheus metrics port
+    entrypoint: [ "node-start" ]
+    healthcheck:
+      test: curl -s http://localhost:26857/status | grep -c true
+      interval: 10s
+      timeout: 2s
+      retries: 6
+      start_period: 15s
+    volumes:
+      - type: volume
+        source: validator-3-data
+        target: /home/platined
+    env_file:
+      - env/validator-3.env
+    configs:
+      - source: genesis
+        target: /genesis
+      - source: seeds
+        target: /seeds
+      - source: validator-3-node-key
+        target: /node_key
+      - source: validator-3-priv-val-key
+        target: /priv_validator_key
+
+  validator-4:
+    image: ${BUILD_IMAGE}
+    ports:
+      - target: 26656
+        published: 26956    # Tendermint peer-to-peer (P2P) port
+      - target: 26657
+        published: 26957    # Tendermint RPC port
+      - target: 1317
+        published: 1617     # Cosmos REST API port
+      - target: 9090
+        published: 9390     # gRPC port
+      - target: 9091
+        published: 9391     # gRPC-Gateway port
+      - target: 26660
+        published: 26960    # Prometheus metrics port
+    entrypoint: [ "node-start" ]
+    healthcheck:
+      test: curl -s http://localhost:26957/status | grep -c true
+      interval: 10s
+      timeout: 2s
+      retries: 6
+      start_period: 15s
+    volumes:
+      - type: volume
+        source: validator-4-data
+        target: /home/platined
+    env_file:
+      - env/validator-4.env
+    configs:
+      - source: genesis
+        target: /genesis
+      - source: seeds
+        target: /seeds
+      - source: validator-4-node-key
+        target: /node_key
+      - source: validator-4-priv-val-key
+        target: /priv_validator_key
+
+  seed-1:
+    image: ${BUILD_IMAGE}
+    ports:
+      - target: 26656
+        published: 27056    # Tendermint peer-to-peer (P2P) port
+      - target: 26657
+        published: 27057    # Tendermint RPC port
+      - target: 1317
+        published: 1717     # Cosmos REST API port
+      - target: 9090
+        published: 9490     # gRPC port
+      - target: 9091
+        published: 9491     # gRPC-Gateway port
+      - target: 26660
+        published: 27060    # Prometheus metrics port
+    entrypoint: [ "node-start" ]
+    healthcheck:
+      test: curl -s http://localhost:27057/status | grep -c true
+      interval: 10s
+      timeout: 2s
+      retries: 6
+      start_period: 15s
+    volumes:
+      - type: volume
+        source: seed-1-data
+        target: /home/platined
+    env_file:
+      - env/seed-1.env
+    configs:
+      - source: genesis
+        target: /genesis
+      - source: seeds
+        target: /seeds
+      - source: seed-1-node-key
+        target: /node_key
+      - source: seed-1-priv-val-key
+        target: /priv_validator_key
+
+  observer-1:
+    image: ${BUILD_IMAGE}
+    ports:
+      - target: 26656
+        published: 27156    # Tendermint peer-to-peer (P2P) port
+      - target: 26657
+        published: 27157    # Tendermint RPC port
+      - target: 1317
+        published: 1817     # Cosmos REST API port
+      - target: 9090
+        published: 9590     # gRPC port
+      - target: 9091
+        published: 9591     # gRPC-Gateway port
+      - target: 26660
+        published: 27160    # Prometheus metrics port
+    volumes:
+      - type: volume
+        source: observer-1-data
+        target: /home/platined
+    entrypoint: [ "node-start" ]
+    healthcheck:
+      test: curl -s http://localhost:27157/status | grep -c true
+      interval: 10s
+      timeout: 2s
+      retries: 6
+      start_period: 15s
+    env_file:
+      - env/observer-1.env
+    configs:
+      - source: genesis
+        target: /genesis
+      - source: seeds
+        target: /seeds
+      - source: observer-1-node-key
+        target: /node_key
+      - source: observer-1-priv-val-key
+        target: /priv_validator_key
+
+configs:
+  # Genesis and seeds
+  genesis:
+    file: network-config/genesis.json
+  seeds:
+    file: network-config/seeds.txt
+
+  # Validator 1
+  validator-1-node-key:
+    file: network-config/validator-1/config/node_key.json
+  validator-1-priv-val-key:
+    file: network-config/validator-1/config/priv_validator_key.json
+
+  # Validator 2
+  validator-2-node-key:
+    file: network-config/validator-2/config/node_key.json
+  validator-2-priv-val-key:
+    file: network-config/validator-2/config/priv_validator_key.json
+
+  # Validator 3
+  validator-3-node-key:
+    file: network-config/validator-3/config/node_key.json
+  validator-3-priv-val-key:
+    file: network-config/validator-3/config/priv_validator_key.json
+
+  # Validator 4
+  validator-4-node-key:
+    file: network-config/validator-4/config/node_key.json
+  validator-4-priv-val-key:
+    file: network-config/validator-4/config/priv_validator_key.json
+
+  # Seed 1
+  seed-1-node-key:
+    file: network-config/seed-1/config/node_key.json
+  seed-1-priv-val-key:
+    file: network-config/seed-1/config/priv_validator_key.json
+
+  # Observer 1
+  observer-1-node-key:
+    file: network-config/observer-1/config/node_key.json
+  observer-1-priv-val-key:
+    file: network-config/observer-1/config/priv_validator_key.json
+
+volumes:
+  validator-1-data:
+  validator-2-data:
+  validator-3-data:
+  validator-4-data:
+  seed-1-data:
+  observer-1-data:

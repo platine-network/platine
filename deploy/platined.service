@@ -1,0 +1,22 @@
+[Unit]
+Description=Service for running platined daemon
+After=network.target
+Documentation=https://docs.platine-chain.org
+
+[Service]
+Type=simple
+User=platined
+ExecStart=/usr/bin/platined start
+Restart=on-failure
+RestartSec=30
+StartLimitBurst=5
+StartLimitInterval=60
+TimeoutSec=120
+StandardOutput=syslog
+StandardError=syslog
+SyslogFacility=syslog
+SyslogIdentifier=platined
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

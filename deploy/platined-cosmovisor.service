@@ -1,0 +1,27 @@
+[Unit]
+Description=Service for running platined daemon
+After=network.target
+Documentation=https://docs.platine-chain.org
+
+[Service]
+Environment="DAEMON_HOME={PLATINED_ROOT_DIR}"
+Environment="DAEMON_NAME={PLATINED_BINARY_NAME}"
+Environment="DAEMON_ALLOW_DOWNLOAD_BINARIES=true"
+Environment="DAEMON_RESTART_AFTER_UPGRADE=true"
+Environment="UNSAFE_SKIP_BACKUP=true"
+Type=simple
+User=platined
+ExecStart=/usr/bin/cosmovisor run start
+Restart=on-failure
+RestartSec=30
+StartLimitBurst=5
+StartLimitInterval=60
+TimeoutSec=120
+StandardOutput=syslog
+StandardError=syslog
+SyslogFacility=syslog
+SyslogIdentifier=cosmovisor
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

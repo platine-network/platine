@@ -1,1 +1,12 @@
-build/
+
+# Exclude all Markdown files
+**/*.md
+
+# Skip build/test folders
+deploy/**
+build/**
+tests/**
+
+# Skip Git-related folders
+.github/**
+**/.git
