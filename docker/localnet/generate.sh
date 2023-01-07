@@ -246,7 +246,7 @@ do
   NODE_P2P_PORT="26656"
   NODE_HOME="${NETWORK_CONFIG_DIR}/${NODE_MONIKER}"
 
-  if ((i != 0))
+  if ((i != 1))
   then
   SEEDS_STR="${SEEDS_STR},"
   fi
