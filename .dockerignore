@@ -7,6 +7,4 @@ deploy/**
 build/**
 tests/**
 
-# Skip Git-related folders
-.github/**
-**/.git
+

@@ -9,8 +9,8 @@ ENV APPNAME=platined
 RUN ARCH=`uname -m`; echo ${ARCH};
 
 # Install minimum necessary dependencies
-ENV PACKAGES curl make git libc-dev bash gcc linux-headers
-RUN apk update && apk add --no-cache $PACKAGES
+ENV PACKAGES ca-certificates curl make git libc-dev bash gcc linux-headers
+RUN apk add --no-cache $PACKAGES
 
 # Set working directory for the build
 WORKDIR /code
@@ -31,7 +31,7 @@ RUN echo "Ensuring binary is statically linked ..." \
 FROM alpine:3.16 AS runner
 
 # Install pre-requisites
-RUN apk update && apk add --no-cache bash ca-certificates curl jq nano busybox-extras
+RUN apk add --no-cache bash ca-certificates curl jq nano busybox-extras
 
 # Copy over binaries from the build-env
 COPY --from=builder /code/build/$APPNAME /usr/bin/$APPNAME
