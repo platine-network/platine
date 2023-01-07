@@ -39,7 +39,7 @@ function configure_node() {
   APP_TOML="${NODE_HOME}/config/app.toml"
   CONFIG_TOML="${NODE_HOME}/config/config.toml"
 
-  sed -i $SED_EXT 's/minimum-gas-prices = ""/minimum-gas-prices = "5uplc"/g' "${APP_TOML}"
+  sed -i $SED_EXT 's/minimum-gas-prices = "0uplc"/minimum-gas-prices = "5uplc"/g' "${APP_TOML}"
   sed -i $SED_EXT 's/enable = false/enable = true/g' "${APP_TOML}"
 
   sed -i $SED_EXT 's|laddr = "tcp://127.0.0.1:26657"|laddr = "tcp://0.0.0.0:26657"|g' "${CONFIG_TOML}"
