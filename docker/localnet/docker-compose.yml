@@ -4,6 +4,7 @@ services:
   validator-1:
     image: ${BUILD_IMAGE}
     container_name: validator-1
+    hostname: validator-1
     ports:
       - target: 26656
         published: 26656    # Tendermint peer-to-peer (P2P) port
@@ -43,6 +44,7 @@ services:
   validator-2:
     image: ${BUILD_IMAGE}
     container_name: validator-2
+    hostname: validator-2
     ports:
       - target: 26656
         published: 26756    # Tendermint peer-to-peer (P2P) port
@@ -82,6 +84,7 @@ services:
   validator-3:
     image: ${BUILD_IMAGE}
     container_name: validator-3
+    hostname: validator-3
     ports:
       - target: 26656
         published: 26856    # Tendermint peer-to-peer (P2P) port
@@ -121,6 +124,7 @@ services:
   validator-4:
     image: ${BUILD_IMAGE}
     container_name: validator-4
+    hostname: validator-4
     ports:
       - target: 26656
         published: 26956    # Tendermint peer-to-peer (P2P) port
@@ -160,6 +164,7 @@ services:
   seed-1:
     image: ${BUILD_IMAGE}
     container_name: seed-1
+    hostname: seed-1
     ports:
       - target: 26656
         published: 27056    # Tendermint peer-to-peer (P2P) port
@@ -199,6 +204,7 @@ services:
   observer-1:
     image: ${BUILD_IMAGE}
     container_name: observer-1
+    hostname: observer-1
     ports:
       - target: 26656
         published: 27156    # Tendermint peer-to-peer (P2P) port
