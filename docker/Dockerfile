@@ -6,8 +6,6 @@ FROM golang:1.19.3-alpine3.16 AS builder
 
 ENV APPNAME=platined
 
-RUN ARCH=`uname -m`; echo ${ARCH};
-
 # Install minimum necessary dependencies
 ENV PACKAGES ca-certificates curl make git libc-dev bash gcc linux-headers
 RUN apk add --no-cache $PACKAGES
