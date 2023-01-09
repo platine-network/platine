@@ -13,6 +13,12 @@ RUN apk add --no-cache $PACKAGES
 # Set working directory for the build
 WORKDIR /code
 
+COPY ../go.mod /code/
+COPY ../go.sum /code/
+
+# Download dependencies
+RUN go mod download
+
 # Add source files
 COPY .. /code/
 
