@@ -49,6 +49,10 @@ RUN addgroup --system ${GROUP} --gid ${GID} \
 
 # Set entrypoint script
 COPY --chown=${USER}:${GROUP} docker/entrypoint.sh /bin/node-start
+
+# Fix windows issue
+RUN dos2unix /bin/node-start
+
 RUN chmod +rx /bin/node-start
 
 # Set working directory & bash defaults

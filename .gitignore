@@ -5,3 +5,10 @@ release/
 .vscode/
 .DS_Store
 vendor
+**/network-config
+
+
+# VS Code
+.devcontainer
+.vscode
+.vscode-upload.json
