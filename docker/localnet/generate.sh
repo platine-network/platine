@@ -64,7 +64,7 @@ function configure_genesis() {
   sed -i $SED_EXT 's/"stake"/"uplc"/' "${GENESIS}"
 
   # Short voting period
-  sed -i $SED_EXT 's/"voting_period": "172800s"/"voting_period": "12s"/' "${GENESIS}"
+  sed -i $SED_EXT 's/"voting_period": "172800s"/"voting_period": "600s"/' "${GENESIS}"
 
   # Test accounts
   BASE_ACCOUNT_1="platine1rnr5jrt4exl0samwj0yegv99jeskl0hs4fya6d"
@@ -248,7 +248,7 @@ do
 
   if ((i != 1))
   then
-  SEEDS_STR="${SEEDS_STR},"
+    SEEDS_STR="${SEEDS_STR},"
   fi
 
   SEEDS_STR="${SEEDS_STR}$(cat "${NODE_HOME}/node_id.txt")@${NODE_MONIKER}:${NODE_P2P_PORT}"

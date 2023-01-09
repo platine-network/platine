@@ -32,8 +32,8 @@ if [ -f "/seeds" ]
 then
     echo "Seeds file passed. Overriding current seeds."
     cp /seeds "${PLATINED_ROOT_DIR}/config/seeds.txt"
-    PLATINED_NODED_P2P_SEEDS="$(cat "${PLATINED_ROOT_DIR}/config/seeds.txt")"
-    export PLATINED_NODED_P2P_SEEDS
+    PLATINED_P2P_SEEDS="$(cat "${PLATINED_ROOT_DIR}/config/seeds.txt")"
+    export PLATINED_P2P_SEEDS
 else
     echo "No seeds file passed. Skipping and retaining existing seeds."
 fi
