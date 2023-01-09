@@ -7,7 +7,7 @@ FROM golang:1.19.3-alpine3.16 AS builder
 ENV APPNAME=platined
 
 # Install minimum necessary dependencies
-ENV PACKAGES ca-certificates curl make git libc-dev bash gcc linux-headers
+ENV PACKAGES ca-certificates curl make git libc-dev bash gcc linux-headers file
 RUN apk add --no-cache $PACKAGES
 
 # Set working directory for the build
@@ -27,6 +27,8 @@ RUN echo "Ensuring binary is statically linked ..." \
 ###############################################################
 
 FROM alpine:3.16 AS runner
+
+ENV APPNAME=platined
 
 # Install pre-requisites
 RUN apk add --no-cache bash ca-certificates curl jq nano busybox-extras
