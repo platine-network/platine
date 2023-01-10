@@ -34,12 +34,18 @@ services:
     configs:
       - source: genesis
         target: /genesis
+      - source: validator-1-app
+        target: /app_toml
+      - source: validator-1-config
+        target: /config_toml
       - source: seeds
         target: /seeds
       - source: validator-1-node-key
         target: /node_key
       - source: validator-1-priv-val-key
         target: /priv_validator_key
+    networks:
+      - appnetwork
 
   validator-2:
     image: ${BUILD_IMAGE}
@@ -74,12 +80,18 @@ services:
     configs:
       - source: genesis
         target: /genesis
+      - source: validator-2-app
+        target: /app_toml
+      - source: validator-2-config
+        target: /config_toml
       - source: seeds
         target: /seeds
       - source: validator-2-node-key
         target: /node_key
       - source: validator-2-priv-val-key
         target: /priv_validator_key
+    networks:
+      - appnetwork
 
   validator-3:
     image: ${BUILD_IMAGE}
@@ -114,12 +126,18 @@ services:
     configs:
       - source: genesis
         target: /genesis
+      - source: validator-3-app
+        target: /app_toml
+      - source: validator-3-config
+        target: /config_toml
       - source: seeds
         target: /seeds
       - source: validator-3-node-key
         target: /node_key
       - source: validator-3-priv-val-key
         target: /priv_validator_key
+    networks:
+      - appnetwork
 
   validator-4:
     image: ${BUILD_IMAGE}
@@ -154,12 +172,18 @@ services:
     configs:
       - source: genesis
         target: /genesis
+      - source: validator-4-app
+        target: /app_toml
+      - source: validator-4-config
+        target: /config_toml
       - source: seeds
         target: /seeds
       - source: validator-4-node-key
         target: /node_key
       - source: validator-4-priv-val-key
         target: /priv_validator_key
+    networks:
+      - appnetwork
 
   seed-1:
     image: ${BUILD_IMAGE}
@@ -194,12 +218,18 @@ services:
     configs:
       - source: genesis
         target: /genesis
+      - source: seed-1-app
+        target: /app_toml
+      - source: seed-1-config
+        target: /config_toml
       - source: seeds
         target: /seeds
       - source: seed-1-node-key
         target: /node_key
       - source: seed-1-priv-val-key
         target: /priv_validator_key
+    networks:
+      - appnetwork
 
   observer-1:
     image: ${BUILD_IMAGE}
@@ -234,12 +264,18 @@ services:
     configs:
       - source: genesis
         target: /genesis
+      - source: observer-1-app
+        target: /app_toml
+      - source: observer-1-config
+        target: /config_toml
       - source: seeds
         target: /seeds
       - source: observer-1-node-key
         target: /node_key
       - source: observer-1-priv-val-key
         target: /priv_validator_key
+    networks:
+      - appnetwork
 
 configs:
   # Genesis and seeds
@@ -253,36 +289,60 @@ configs:
     file: network-config/validator-1/config/node_key.json
   validator-1-priv-val-key:
     file: network-config/validator-1/config/priv_validator_key.json
+  validator-1-app:
+    file: network-config/validator-1/config/app.toml
+  validator-1-config:
+    file: network-config/validator-1/config/config.toml
 
   # Validator 2
   validator-2-node-key:
     file: network-config/validator-2/config/node_key.json
   validator-2-priv-val-key:
     file: network-config/validator-2/config/priv_validator_key.json
+  validator-2-app:
+    file: network-config/validator-2/config/app.toml
+  validator-2-config:
+    file: network-config/validator-2/config/config.toml
 
   # Validator 3
   validator-3-node-key:
     file: network-config/validator-3/config/node_key.json
   validator-3-priv-val-key:
     file: network-config/validator-3/config/priv_validator_key.json
+  validator-3-app:
+    file: network-config/validator-3/config/app.toml
+  validator-3-config:
+    file: network-config/validator-3/config/config.toml
 
   # Validator 4
   validator-4-node-key:
     file: network-config/validator-4/config/node_key.json
   validator-4-priv-val-key:
     file: network-config/validator-4/config/priv_validator_key.json
+  validator-4-app:
+    file: network-config/validator-4/config/app.toml
+  validator-4-config:
+    file: network-config/validator-4/config/config.toml
 
   # Seed 1
   seed-1-node-key:
     file: network-config/seed-1/config/node_key.json
   seed-1-priv-val-key:
     file: network-config/seed-1/config/priv_validator_key.json
+  seed-1-app:
+    file: network-config/seed-1/config/app.toml
+  seed-1-config:
+    file: network-config/seed-1/config/config.toml
 
   # Observer 1
   observer-1-node-key:
     file: network-config/observer-1/config/node_key.json
   observer-1-priv-val-key:
     file: network-config/observer-1/config/priv_validator_key.json
+  observer-1-app:
+    file: network-config/observer-1/config/app.toml
+  observer-1-config:
+    file: network-config/observer-1/config/config.toml
 
 volumes:
   validator-1-data:
@@ -291,3 +351,8 @@ volumes:
   validator-4-data:
   seed-1-data:
   observer-1-data:
+
+
+networks:
+  appnetwork:
+    name: appnetwork

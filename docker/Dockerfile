@@ -39,7 +39,7 @@ ENV APPNAME=platined
 # Install pre-requisites
 RUN apk add --no-cache bash ca-certificates curl jq nano busybox-extras
 
-# Copy over binaries from the build-env
+# Copy over binaries from the builder
 COPY --from=builder /code/build/$APPNAME /usr/bin/$APPNAME
 
 # Set user directory and details
